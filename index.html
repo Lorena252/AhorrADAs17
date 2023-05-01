@@ -28,8 +28,8 @@
 </header>
 
 <section id="section-balance">
- <div class="flex me-1.5 justify-center pt-[50px] ">
-    <div class=" w-48 h-1/2 ">
+ <div class="flex me-1.5 justify-center pt-[50px]  ">
+    <div class=" w-72 h-1/2 ">
          <div class="mb-5 bg-white p-[15px] "><h1 class="font-bold text-2xl pt-[10px] pb-[15px]">Balance</h1>
           <div class="flex flex-col ... ">
             <div class="bg-white flex justify-between ... pb-[10px] " > <div><p>Ganancias</p> </div>  <div><p class="text-teal-400">+0</p></div></div>
@@ -37,9 +37,9 @@
             <div class="bg-white flex justify-between ... pb-[10px]"><div><p>Total</p> </div>  <div><p class="font-semibold text-zinc-950">0</p></div></div>
           </div>
         </div>
-         <div class="caja-filtros ">
+         <div class=" caja-filtros ">
           <div class="flex justify-between ...  bg-white p-[15px]"> <h1 class="font-bold  ">Filtros</h1> <div><a href="" class="text-cyan-700">Ocultar filtros</a></div>   </div>
-       <div class=" w-48 h-1/2 bg-white p-[15px]" >
+       <div class=" w-72 h-1/2 bg-white p-[15px]" >
            <p class="font-bold">Tipo</p>
            <select class=" w-full h-8 border border-slate-300 hover:border-slate-400 ... mt-[8px] mb-[8px] outline-1 outline-blue-400  " name="" id="select-type">
             <option value="Todos">Todos</option>
@@ -76,11 +76,13 @@
              <h1 class="font-bold text-2xl p-2 ">Operaciones</h1>
        <div class="p-2"><button class="w-30 h-10 text-white bg-emerald-400 p-[10px] rounded ">+ Nueva operacion</button></div>
       </div>
+      <div class="container-no-results">
       <div class="flex justify-center mt-[20px] pt-2.5  "  >
       <img class="w-1/2 " src="assets/undraw_wallet_aym5.png.png" alt="" >
       </div>
       <h1 class="text-center pt-[20px]">Sin resultados</h1>
       <p class="text-center pb-[20px]">Cambia los filtros o agrega operaciones</p>
+</div>
     </div>
  </div>
 </section>
@@ -156,7 +158,7 @@
   <div class="h-[500px] flex me-1.5 justify-center pt-[50px]">
     <div class=" ml-4 bg-white w-1/2 p-[25px] ">
       <h1 class="font-bold text-4xl ">Reportes</h1>
-      <div class="justify-center mt-[20px] pt-2.5  ">
+      <div class="justify-center mt-[20px] pt-2.5 container-without-reports ">
         <div class=" flex justify-center">
            <img src="assets/undraw_Charts_re_5qe9.png" alt="">     
         </div>     
