@@ -5,39 +5,69 @@ const $ = (selector) => document.querySelector(selector)
 const showElement = (selector) => $(selector).classList.remove("hidden")
 const hideElement = (selector) => $(selector).classList.add("hidden")
 
-//Id para cada operaciones//
+//Id por operacion//
 const randomId = () => self.crypto.randomUUID()
 
+            // localStorage//
+ const getOperationsAndCategories = (key) => JSON.parse(localStorage.getItem(key))
+ const setOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
-//-----Mandar y traer datos al localStorage----//
-//traer operaciones y categorias//
-const bringOperationsAndCategories = () => JSON.parse(localStorage.getItem(key))
-//mandar operaciones y categorias//
-const commandOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array))
+if(!getOperationsAndCategories("operations")){
+  setOperationsAndCategories("operations", [])
+}
 
-//guardar informacion de operaciones 
+
+const setOfOperations = getOperationsAndCategories("operations") || []
+
+//pinta operaciones en el html//
+const operationsData = (operations) => {
+$("#table-operations").innerHTML = ""
+  for (const {id, description, amount, guy,category, date } of operations){
+    $("#table-operations").innerHTML += `
+    <tr>
+    <td>${description}</td>
+    <td class="">${category}</td>
+     <td>${date} </td>
+    <td> ${guy == "Gasto" ? "-" : "+"} $ ${amount}</td>
+    <td><button ${id}><i class="fa-solid fa-pen-to-square"></i></button>
+    <button ${id}><i class="fa-solid fa-trash"></i></button></td>
+    </tr>
+    `
+  } 
+} 
+
+ 
+//obtengo value del form nueva operacion//
 const saveOperationsInformation = () =>{
-return{
+ return{
     id: randomId(),
     description: $("#description").value,
-    amount: $("#amount").value,
+    amount: $("#amount").valueAsNumber,
     guy: $("#guy").value ,
-    category: $("#category").value ,
+    category: $("#category").value,
     date: $("#date").value
+ }
+}
+
+const addOperations = () =>{
+  //arraydel local//
+  const existingOperation =  getOperationsAndCategories("operations")
+   const newOperation = saveOperationsInformation()
+   existingOperation.push(newOperation)
+   setOperationsAndCategories("operations", existingOperation)
+   console.log(existingOperation)
 
 }
-}
-
-// console.log(saveOperationsInformation())
 
 
 
 
 
-
-
-//Mostrar y ocultar secciones//
+// inicializar Mostrar y ocultar secciones, ejecutar btn//
 const openSaved = () =>{
+setOperationsAndCategories("operations", setOfOperations)
+operationsData(setOfOperations)
+
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories")
     hideElement(".show-balance")
@@ -64,8 +94,17 @@ const openSaved = () =>{
    hideElement(".show-balance")
    hideElement(".show-categories")
    hideElement(".container-no-results")
+   hideElement("#tittle-edit")
+   hideElement("#edit-operation")
   })
 
-}
+  $("#add-new-operation").addEventListener("click", (e) =>{
+    e.preventDefault()
+    addOperations()
 
+  })
+
+
+}
+//ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved)

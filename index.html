@@ -18,22 +18,10 @@
     <div class="w-96  my-5 " >
       <div class="">
         <ul class="flex ... w-80">
-          <li class="flex-1 ... h-[50px] w-28 rounded hover:bg-emerald-600 " ><a href="#" id="balance"><i class="fas fa-chart-line mr-2" aria-hidden="true"></i>Balance</a> </li>
+          <li class="flex-1 ... h-[50px] w-28 rounded hover:bg-emerald-600 " ><a href="index.html" id="balance"><i class="fas fa-chart-line mr-2" aria-hidden="true"></i>Balance</a> </li>
           <li class="flex-1 ... h-[50px] w-28 rounded hover:bg-emerald-600 "><a href="#" id="categories"><i class="fas fa-tag mr-2" aria-hidden="true"></i>Categorias</a> </li>
           <li class="flex-1 ... h-[50px] w-28 rounded hover:bg-emerald-600 "><a href="#" id="reports"> <i class="fas fa-chart-pie mr-2" aria-hidden="true"></i> Reportes</a> </li>
-        </ul>
-
-      <!-- <div class="flex-1 ... h-[50px] w-28 rounded hover:bg-emerald-600 ">
-        <i class="fas fa-chart-line mr-2" aria-hidden="true"></i> Balance
-      </div>
-      <div class="contents">
-      <div class="flex-1... h-[30px] w-28 rounded hover:bg-emerald-600 ">
-        <i class="fas fa-tag mr-2" aria-hidden="true"></i>Categorias
-      </div>
-      <div class="flex-1... h-[30px] w-28 rounded hover:bg-emerald-600">       
-        <i class="fas fa-chart-pie mr-2" aria-hidden="true"></i>Reportes
-      </div> -->
-      
+        </ul>    
     </div>
   </div>
  </div>
@@ -118,7 +106,7 @@
         <button class="w-30 h-10 text-white bg-emerald-400 p-[10px] rounded " id="new-operation">+ Nueva operacion</button>
       </div>
       </div>
-      <div class="container-no-results">
+      <div class="container-no-results hidden">
       <div class="flex justify-center mt-[20px] pt-2.5  "  >
       <img class="w-1/2 " src="assets/undraw_wallet_aym5.png.png" alt="" >
       </div>
@@ -126,8 +114,8 @@
       <p class="text-center pb-[20px]">Cambia los filtros o agrega operaciones</p>
 </div>
 <!-- //aca pinto las operaciones una vez hecho el push// -->
-<div class="with-operations hidden ">
-  <table class=" table-fixed bg-emerald-200">
+<div class="with-operations">
+  <table class=" auto table-fixed bg-white w-full">
     <thead>
       <tr>
         <th>Descripcion</th>
@@ -137,15 +125,7 @@
         <th>Acciones</th>
       </tr>
     </thead>
-    <tbody id="table-operations"> 
-      <!----------------------operaciones mostrar con js-------------->
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          <button><i class="fa-solid fa-pen-to-square"></i></button>
-          <button><i class="fa-solid fa-trash"></i></button>
-        </td>
+    <tbody class="w-full" id="table-operations"> 
     </tbody>
   </table>
 </div>
@@ -158,7 +138,8 @@
 <div class="flex me-1.5 justify-center pt-[50px] ">
 <div class="w-full mr-[25px] ml-4 bg-white p-[25px] sm:w-1/2 ">
 <div>
-  <h1 class="font-bold text-4xl ">Nueva operación</h1>
+  <h1 class="font-bold text-4xl" id="tittle-new-operation">Nueva operación</h1>
+  <h1 class="font-bold text-4xl" id="tittle-edit">Editar</h1>
 </div> 
 <!-- Formulario agregar para operaciones-->
 <form action="" class="form-new-operation  ">
@@ -168,7 +149,7 @@
 </div>
 <div  class="flex flex-col pt-[10px] 	">
   <label for="amount">Monto</label>
-  <input  class="h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400  " type="text" name="amount" id="amount" >
+  <input  class="h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400  " type="number" name="amount" id="amount" >
 </div>
 <div class="flex flex-col pt-[10px]  ">
   <label for="guy">Tipo</label>
@@ -193,8 +174,9 @@
 <input class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400" type="date" name="date" id="date">
 </div>
 <div class="flex justify-end ... pt-[20px] ">
-  <button class="w-20 h-10 bg-slate-300 mr-[15px] rounded">Cancelar</button>
-  <button class="w-20 h-10 text-white bg-emerald-400 rounded">Agregar</button>
+  <button class="w-20 h-10 bg-slate-300 mr-[15px] rounded" id="cancel">Cancelar</button>
+  <button class="w-20 h-10 text-white bg-emerald-400 rounded " id="add-new-operation">Agregar</button>
+  <button class="w-20 h-10 text-white bg-emerald-400 rounded" id="edit-operation">Editar</button>
 </div>
 </form>
 </div>
