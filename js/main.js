@@ -1,13 +1,9 @@
 const $ = (selector) => document.querySelector(selector)
 
-
-//Mostrar y ocultar//
 const showElement = (selector) => $(selector).classList.remove("hidden")
 const hideElement = (selector) => $(selector).classList.add("hidden")
 
-//Id por operacion//
 const randomId = () => self.crypto.randomUUID()
-
             // localStorage//
  const getOperationsAndCategories = (key) => JSON.parse(localStorage.getItem(key))
  const setOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array))
@@ -16,8 +12,9 @@ if(!getOperationsAndCategories("operations")){
   setOperationsAndCategories("operations", [])
 }
 
-
+//array del local//
 const setOfOperations = getOperationsAndCategories("operations") || []
+
 
 //pinta operaciones en el html//
 const operationsData = (operations) => {
@@ -26,17 +23,16 @@ $("#table-operations").innerHTML = ""
     $("#table-operations").innerHTML += `
     <tr>
     <td>${description}</td>
-    <td class="">${category}</td>
+    <td class="text-emerald-500">${category}</td>
      <td>${date} </td>
     <td> ${guy == "Gasto" ? "-" : "+"} $ ${amount}</td>
-    <td><button ${id}><i class="fa-solid fa-pen-to-square"></i></button>
-    <button ${id}><i class="fa-solid fa-trash"></i></button></td>
+    <td><button class="bg-emerald-300	edit-operation" ><i class="fa-solid fa-pen-to-square"></i></button>
+    <button class= "bg-red-600 rounded  delete-operation"  onclick="deleteOperation('${id}')"   ><i class="fa-solid fa-trash "></i></button></td>
     </tr>
     `
   } 
 } 
 
- 
 //obtengo value del form nueva operacion//
 const saveOperationsInformation = () =>{
  return{
@@ -50,23 +46,97 @@ const saveOperationsInformation = () =>{
 }
 
 const addOperations = () =>{
-  //arraydel local//
+  //array del local//
   const existingOperation =  getOperationsAndCategories("operations")
    const newOperation = saveOperationsInformation()
    existingOperation.push(newOperation)
    setOperationsAndCategories("operations", existingOperation)
    console.log(existingOperation)
+}
 
+//eliminar operacion
+const deleteOperation = (id) =>{
+      myOperations = getOperationsAndCategories("operations").filter(operation => operation.id !== id)
+  console.log(myOperations)
+setOperationsAndCategories("operations", myOperations)
+operationsData(myOperations)
 }
 
 
 
 
+//categorias por default//
+const defaultCategories = [
+ 
+  {
+  id: randomId(),
+  category: "Todas"
+  },
+  {
+   id: randomId(),
+   category: "Comida"
+  },
+  {
+    id: randomId(),
+    category: "Servicios",  
+  },
+   {
+    id: randomId(),
+    category: "Salidas"  
+   },
+   {
+    id: randomId(),
+    category: "Educación"
+   },
+   {
+    id: randomId(),
+    category: "Transporte"
+   },
+   {
+    id: randomId(),
+    category: "Trabajo"
+   },
+   {
+    id: randomId(),
+    category:"Tienda de ropa"
+    },
+]
+
+
+const setOfCategories = getOperationsAndCategories("categories") || defaultCategories
+console.log(setOfCategories)
+
+const categoriesData = (defaultCategories) =>{
+  $("#select-category").innerHTML = ""
+  for (const{id, category} of defaultCategories){
+    $("#select-category").innerHTML += `
+    <option value="${category}">${category} </option>
+    `
+  }
+}
+
+const sectionCategories = (defaultCategories) =>{
+  $("#table-new-categories").innerHTML = ""
+  for (const{id,category} of defaultCategories){
+    $("#table-new-categories").innerHTML += `  
+   <tr class= "flex justify-between ..."> 
+   <td><option value="${category}">${category} </option> </td>
+   <td><button class= "edit-category" ${id}><i class="fa-solid fa-pen-to-square"></i> </button>
+   <button class="delete-category" ${id} ><i class="fa-solid fa-trash "></i> </button></td>
+    </tr>
+    `
+  }
+}
 
 // inicializar Mostrar y ocultar secciones, ejecutar btn//
 const openSaved = () =>{
-setOperationsAndCategories("operations", setOfOperations)
-operationsData(setOfOperations)
+  //operaciones localStorage//
+  setOperationsAndCategories("operations", setOfOperations)
+  operationsData(setOfOperations)
+  //categorias localStorage//
+  setOperationsAndCategories("categories", defaultCategories)
+  categoriesData(defaultCategories)
+  sectionCategories(defaultCategories)
 
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories")
@@ -104,6 +174,9 @@ operationsData(setOfOperations)
 
   })
 
+  $("#add-category").addEventListener("click", (e)=>{
+
+  })
 
 }
 //ejecuta cuando se carga el dom//
