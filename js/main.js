@@ -15,7 +15,6 @@ if(!getOperationsAndCategories("operations")){
 //array del local//
 const setOfOperations = getOperationsAndCategories("operations") || []
 
-
 //pinta operaciones en el html//
 const operationsData = (operations) => {
 $("#table-operations").innerHTML = ""
@@ -32,6 +31,7 @@ $("#table-operations").innerHTML = ""
     `
   } 
 } 
+
 
 //obtengo value del form nueva operacion//
 const saveOperationsInformation = () =>{
@@ -54,7 +54,7 @@ const addOperations = () =>{
    console.log(existingOperation)
 }
 
-//eliminar operacion
+//eliminar operacion/
 const deleteOperation = (id) =>{
       myOperations = getOperationsAndCategories("operations").filter(operation => operation.id !== id)
   console.log(myOperations)
@@ -62,16 +62,8 @@ setOperationsAndCategories("operations", myOperations)
 operationsData(myOperations)
 }
 
-
-
-
 //categorias por default//
-const defaultCategories = [
- 
-  {
-  id: randomId(),
-  category: "Todas"
-  },
+let defaultCategories = [
   {
    id: randomId(),
    category: "Comida"
@@ -102,12 +94,11 @@ const defaultCategories = [
     },
 ]
 
-
-const setOfCategories = getOperationsAndCategories("categories") || defaultCategories
+ const setOfCategories = getOperationsAndCategories("categories") || defaultCategories
 console.log(setOfCategories)
 
 const categoriesData = (defaultCategories) =>{
-  $("#select-category").innerHTML = ""
+  // $("#select-category").innerHTML = ""
   for (const{id, category} of defaultCategories){
     $("#select-category").innerHTML += `
     <option value="${category}">${category} </option>
@@ -122,11 +113,32 @@ const sectionCategories = (defaultCategories) =>{
    <tr class= "flex justify-between ..."> 
    <td><option value="${category}">${category} </option> </td>
    <td><button class= "edit-category" ${id}><i class="fa-solid fa-pen-to-square"></i> </button>
-   <button class="delete-category" ${id} ><i class="fa-solid fa-trash "></i> </button></td>
+   <button class="delete-category" onclick="deleteCategory('${id}')" ><i class="fa-solid fa-trash "></i> </button></td>
     </tr>
     `
   }
 }
+
+//elimina categorias de las secciones correspondientes//
+const deleteCategory = (id) =>{
+     myCategories = getOperationsAndCategories("categories").filter(categorie  => categorie.id !== id)
+      console.log(myCategories)
+     setOperationsAndCategories("categories", myCategories)
+     categoriesData(myCategories) 
+
+}
+
+// const getNewCategory = () =>{
+//   defaultCategories.push({
+//     id: randomId(),
+//     category: $("#new-category").value
+//   })
+// }
+
+// const saveNewCategory = () =>{
+
+// }
+
 
 // inicializar Mostrar y ocultar secciones, ejecutar btn//
 const openSaved = () =>{
@@ -134,9 +146,9 @@ const openSaved = () =>{
   setOperationsAndCategories("operations", setOfOperations)
   operationsData(setOfOperations)
   //categorias localStorage//
-  setOperationsAndCategories("categories", defaultCategories)
-  categoriesData(defaultCategories)
-  sectionCategories(defaultCategories)
+  setOperationsAndCategories("categories", setOfCategories)
+   categoriesData(setOfCategories)
+   sectionCategories(setOfCategories)
 
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories")
@@ -175,7 +187,7 @@ const openSaved = () =>{
   })
 
   $("#add-category").addEventListener("click", (e)=>{
-
+    
   })
 
 }
