@@ -37,25 +37,27 @@
               <div>
                 <p>Ganancias</p>
                </div> 
-               <div>
-                <p class="text-teal-400">+0</p>
+               <div class="flex">
+                <p class="text-teal-400"  >+</p>
+                <p class="text-teal-400" id="paint-earnings"></p>
               </div>
             </div>
 
             <div class="bg-white flex justify-between ... pb-[10px]">
-              <div>
+              <div>           
                 <p>Gastos</p> 
               </div>  
-            <div>
-              <p class="text-rose-500">-0</p>
+            <div class="flex">
+              <p class="text-rose-500">-</p>
+              <p class="text-rose-500" id="paint-expenses" ></p>              
             </div>
           </div>
             <div class="bg-white flex justify-between ... pb-[10px]">
               <div>
-                <p>Total</p> 
+                <p >Total</p> 
               </div> 
                <div>
-                <p class="font-semibold text-zinc-950">0</p>
+                <p class="" id="resultado-total">0</p>
               </div>
             </div>
           </div>
@@ -77,8 +79,8 @@
            <p class="font-bold">Categorias</p>    
           
            <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400 "  id="select-category">
-            <option value="todas">Todas</option>   
-            <!-- MOSTRAR CON JS -->
+           <option value="Todas">Todas</option>   
+        
            </select>
            <p class="font-bold">Desde</p>
            <input class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  type="date" id="date-filter">
@@ -109,7 +111,6 @@
       <h1 class="text-center pt-[20px]">Sin resultados</h1>
       <p class="text-center pb-[20px]">Cambia los filtros o agrega operaciones</p>
 </div>
-<!-- //aca pinto las operaciones una vez hecho el push// -->
 <div class="w-full  with-operations">
   <table class=" p-5 table-fixed bg-white w-full">
     <thead>
@@ -137,7 +138,7 @@
   <h1 class="font-bold text-4xl" id="tittle-new-operation">Nueva operación</h1>
   <h1 class="font-bold text-4xl" id="tittle-edit">Editar</h1>
 </div> 
-<!-- Formulario agregar para operaciones-->
+
 <form action="" class="form-new-operation  ">
 <div class="flex flex-col mt-[35px] font-semibold">
 <label for="description ">Descripción</label>
@@ -157,6 +158,7 @@
 <div class="flex flex-col pt-[10px] ">
   <label for="category">Categoria</label>
   <select class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400 "  name="" id="category">
+    <option value="Todas">Todas</option>
     <option value="Comida">Comida</option>
     <option value="Servicios">Servicios</option>
     <option value="Salidas">Salidas</option>
@@ -189,7 +191,6 @@
       <input class="w-10/12 h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400 " type="text" id="new-category">
       <button class="w-20 h-10 text-white bg-emerald-400 rounded" id="add-category">Agregar</button>
     </div>
-    <!-- Aca pintar categorias con js -->
     <div class="mt-2" >
       <table class=" w-full" >
         <tbody class="w-full" id="table-new-categories">
