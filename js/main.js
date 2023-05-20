@@ -19,8 +19,12 @@ const operationsData = (operations) => {
   let accGanancias = [];
   let accGastos = [];
   $("#table-operations").innerHTML = "";
-  for (const { id, description, amount, guy, category, date } of operations) {
-    $("#table-operations").innerHTML += `
+  if (operations.length) {
+    hideElement(".container-no-results");
+    showElement(".with-operations");
+
+    for (const { id, description, amount, guy, category, date } of operations) {
+      $("#table-operations").innerHTML += `
     <tr>
     <td>${description}</td>
     <td class="text-emerald-500">${category}</td>
@@ -28,10 +32,14 @@ const operationsData = (operations) => {
     <td ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
-    <td><button class="bg-emerald-300	edit-operation" ><i class="fa-solid fa-pen-to-square"></i></button>
+    <td><button class="bg-emerald-300	rounded edit-operation" ><i class="fa-solid fa-pen-to-square"></i></button>
     <button class= "bg-red-600 rounded  delete-operation"  onclick="deleteOperation('${id}')"   ><i class="fa-solid fa-trash "></i></button></td>
     </tr>
     `;
+    }
+  } else {
+    showElement(".container-no-results");
+    hideElement(".with-operations");
   }
 
   let acc = 0;
@@ -48,11 +56,12 @@ const operationsData = (operations) => {
 
   let resultadoTotal = acc - accG;
   if (resultadoTotal < 0) {
-    $("#resultado-total").classList = "bg-red-600";
-    $("#resultado-total").innerHTML = resultadoTotal;
+    $("#total-result").classList = "bg-red-600";
+    $("#total-result").innerHTML = resultadoTotal;
   } else {
-    $("#resultado-total").classList = "bg-sky-300";
-    $("#resultado-total").innerHTML = resultadoTotal;
+    $("#total-result").classList = "bg-emerald-600";
+    $("#total-result").innerHTML = resultadoTotal;
+    showElement(".total-positive");
   }
 };
 
@@ -120,7 +129,7 @@ const setOfCategories =
 console.log(setOfCategories);
 
 const categoriesData = (defaultCategories) => {
-  $("#select-category").innerHTML = "";
+  $("#select-category").innerHTML += "";
   for (const { id, category } of defaultCategories) {
     $("#select-category").innerHTML += `
     <option  value="${category}">${category} </option>
@@ -164,7 +173,7 @@ const saveNewCategory = () => {
   const newCategory = getNewCategory();
   bringCategories.push(newCategory);
   setOperationsAndCategories("categories", bringCategories);
-  console.log(bringCategories);
+  // console.log(bringCategories);
 };
 
 // inicializar Mostrar y ocultar secciones, ejecutar btn//
