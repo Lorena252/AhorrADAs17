@@ -32,7 +32,7 @@ const operationsData = (operations) => {
     <td ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
-    <td><button class="bg-emerald-300	rounded edit-operation" ><i class="fa-solid fa-pen-to-square"></i></button>
+    <td><button class="bg-emerald-300	rounded edit-operation" onclick="editOperation('${id}')"><i class="fa-solid fa-pen-to-square"></i></button>
     <button class= "bg-red-600 rounded  delete-operation"  onclick="deleteOperation('${id}')"   ><i class="fa-solid fa-trash "></i></button></td>
     </tr>
     `;
@@ -66,9 +66,9 @@ const operationsData = (operations) => {
 };
 
 //obtengo value del form nueva operacion//
-const saveOperationsInformation = () => {
+const saveOperationsInformation = (operationId) => {
   return {
-    id: randomId(),
+    id: operationId ? operationId : randomId(),
     description: $("#description").value,
     amount: $("#amount").valueAsNumber,
     guy: $("#guy").value,
@@ -176,6 +176,43 @@ const saveNewCategory = () => {
   // console.log(bringCategories);
 };
 
+
+//boton editar operaciones//
+const endEdit = () =>{
+  const editById = $("#edit-operation").getAttribute("btn-edit")
+   const editSpecificOperation = getOperationsAndCategories("operations").map(operation => {
+    if(operation.id === editById){
+     return saveOperationsInformation(operation.id)
+    }
+    return operation
+   })
+   setOperationsAndCategories("operations", editSpecificOperation)
+}
+
+
+
+const editOperation = (id) =>{
+showElement(".show-operation")
+hideElement(".show-categories")
+hideElement(".show-balance")
+hideElement(".show-reports")
+hideElement(".new-operation")
+hideElement(".add-operation")
+const editMyOperation = getOperationsAndCategories("operations").find(operation => operation.id === id) 
+  console.log(editMyOperation)
+$("#edit-operation").setAttribute("btn-edit", id)
+  $("#description").value = editMyOperation.description
+ $("#amount").valueAsNumber = editMyOperation.amount
+ $("#guy").value = editMyOperation. guy
+ $("#category").value = editMyOperation.category
+ $("#date").value = editMyOperation.date
+
+}
+
+
+
+
+
 // inicializar Mostrar y ocultar secciones, ejecutar btn//
 const openSaved = () => {
   //operaciones localStorage//
@@ -225,6 +262,17 @@ const openSaved = () => {
     getNewCategory();
     saveNewCategory();
   });
+
+ $("#edit-operation").addEventListener("click",(e) =>{
+  e.preventDefault()
+  endEdit()
+  hideElement(".show-operation");
+  showElement(".show-balance");
+operationsData(getOperationsAndCategories("operations"))
+ })
+
+
+
 };
 //ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved);
