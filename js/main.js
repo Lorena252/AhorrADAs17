@@ -261,6 +261,7 @@ const openSaved = () => {
   $("#add-category").addEventListener("click", () => {
     getNewCategory();
     saveNewCategory();
+    sectionCategories(getOperationsAndCategories("categories"))
   });
 
  $("#edit-operation").addEventListener("click",(e) =>{
