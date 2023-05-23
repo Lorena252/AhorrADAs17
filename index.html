@@ -56,8 +56,8 @@
               <div>
                 <p >Total</p> 
               </div> 
-               <div class=" flex  total-containers">
-                <p class=" bg-emerald-600 total-positive hidden">+</p>
+               <div class="flex  total-containers">
+                <p class="bg-emerald-600 total-positive hidden">+</p>
                 <p class="" id="total-result">0</p>
               </div>
             </div>
@@ -67,10 +67,11 @@
           <div class="flex justify-between ...  bg-white p-[15px] rounded">
              <h1 class="font-bold  ">Filtros</h1>
               <div>
-                <a href="" class="text-cyan-700">Ocultar filtros</a>
+                <a href="#" class="text-cyan-700" id="hidden-filters">Ocultar filtros</a>
+                <a href="#" class="text-cyan-700 hidden" id="see-filters">Mostrar filtros</a>
               </div> 
               </div>
-       <div class="  h-1/2 bg-white p-[15px] sm:w-72" >
+          <div class=" h-1/2 bg-white p-[15px] sm:w-72 " id="container-filters">
            <p class="font-bold">Tipo</p>
            <select class=" w-full h-8 border border-slate-300 hover:border-slate-400 ... mt-[8px] mb-[8px] outline-1 outline-blue-400  " name="" id="select-type">
             <option value="Todos">Todos</option>
@@ -87,18 +88,18 @@
            <input class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  type="date" id="date-filter">
            <p class="font-bold">Ordenar por</p>
            <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  name="" id="">
-            <option value=""> Mas reciente</option>
-            <option value="">Menos reciente</option>
-            <option value="">Mayor Monto</option>
-            <option value="">Menos Monto</option>
-            <option value="">A/Z</option>
-            <option value="">Z/A</option>
+            <option value="Mas reciente"> Mas reciente</option>
+            <option value="Menos reciente">Menos reciente</option>
+            <option value="Mayor Monto">Mayor Monto</option>
+            <option value="Menos Monto">Menos Monto</option>
+            <option value="A/Z">A/Z</option>
+            <option value="Z/A">Z/A</option>
            </select>
       </div> 
        </div>
     </div>
   
-    <div class="  h-[500px] ml-4  sm:w-1/2 mr-[25px]  p-[25px] bg-white  sm:h-auto rounded " >
+    <div class="  h-[500px] ml-4  sm:w-1/2 mr-[25px]  p-[25px] bg-white rounded " >
       <div class="flex justify-between ">
              <h1 class="font-bold text-2xl p-2 ">Operaciones</h1>
        <div class="p-2">
@@ -131,13 +132,11 @@
  </div>
 </section>
 
-<!-- -------------------------------------------SECCION NUEVA OPERACION--------------------------------->
 <section id="new-operation " class="show-operation hidden">
 <div class="flex me-1.5 justify-center pt-[50px] ">
 <div class="w-full mr-[25px] ml-4 bg-white p-[25px] sm:w-1/2 ">
 <div>
   <h1 class="font-bold text-4xl new-operation" id="tittle-new-operation">Nueva operación</h1>
-  <!-- TITULO EDITAR  -->
   <h1 class="font-bold text-4xl" id="tittle-edit">Editar</h1>
 </div> 
 
@@ -176,7 +175,6 @@
 <div class="flex justify-end ... pt-[20px] ">
   <button class="w-20 h-10 bg-slate-300 mr-[15px] rounded" id="cancel">Cancelar</button>
   <button class="w-20 h-10 text-white bg-emerald-400 rounded add-operation" id="add-new-operation">Agregar</button>
-  <!-- BOTON EDITAR -->
  <button class="w-20 h-10 text-white bg-emerald-400 rounded btn-edit-form" id="edit-operation">Editar </button>
 </div>
 </form>
@@ -184,7 +182,6 @@
 </div>
 </section>
 
-             <!-- -----------------------------SECCION CATEGORIAS--------------- -->
 <section id="section-categories" class="show-categories hidden ">
   <div class="flex me-1.5 justify-center pt-[50px]">
   <div class="w-full mr-[25px] ml-4 bg-white p-[25px] sm:w-1/2 rounded">
@@ -198,7 +195,6 @@
     <div class="mt-2" >
       <table class=" w-full" >
         <tbody class="w-full" id="table-new-categories">
-
         </tbody>
       </table>
     </div>
@@ -207,7 +203,6 @@
 </div>
 </section>
 
-        <!-- --------------------------------------SECCION REPORTES-------------------------- -->
 <section id="section-reports" class="show-reports hidden">
   <div class="h-[500px] flex me-1.5 justify-center pt-[50px]">
     <div class="w-full ml-4 bg-white  mr-[25px] p-[25px] sm:w-1/2 rounded">

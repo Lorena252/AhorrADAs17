@@ -70,7 +70,6 @@ const validateFieldDescription = () => {
   return description.value !== "";
 };
 
-//obtengo value del form nueva operacion//
 const saveOperationsInformation = (operationId) => {
   return {
     id: operationId ? operationId : randomId(),
@@ -91,7 +90,6 @@ const addOperations = () => {
   console.log(existingOperation);
 };
 
-//eliminar operacion/
 const deleteOperation = (id) => {
   myOperations = getOperationsAndCategories("operations").filter(
     (operation) => operation.id !== id
@@ -167,9 +165,9 @@ const deleteCategory = (id) => {
   myCategories = getOperationsAndCategories("categories").filter(
     (categorie) => categorie.id !== id
   );
-  console.log(myCategories);
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
+  sectionCategories(myCategories)
 };
 
 const getNewCategory = () => {
@@ -279,6 +277,20 @@ const openSaved = () => {
     showElement(".show-balance");
     operationsData(getOperationsAndCategories("operations"));
   });
+
+ $("#hidden-filters").addEventListener("click", () =>{
+ hideElement("#container-filters")
+ hideElement("#hidden-filters")
+ showElement("#see-filters")
+ })
+
+ $("#see-filters").addEventListener("click", () =>{
+  showElement("#container-filters")
+  showElement("#hidden-filters")
+  hideElement("#see-filters")
+ })
+
+
 };
 //ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved);
