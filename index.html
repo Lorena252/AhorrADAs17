@@ -145,6 +145,7 @@
 <div class="flex flex-col mt-[35px] font-semibold">
 <label for="description" id="title-description">Descripción</label>
 <input class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400  "  type="text" name="description" id="description">
+<p class="w-[200px] bg-yellow-400 mt-2 rounded-sm hidden" id="complete-field"><i class="fa-solid fa-circle-xmark pl-2"></i> Complete este campo</p>
 </div>
 <div  class="flex flex-col pt-[10px] 	">
   <label for="amount">Monto</label>
@@ -160,12 +161,12 @@
 <div class="flex flex-col pt-[10px] ">
   <label for="category">Categoria</label>
   <select class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400 "  name="" id="category">
-    <option value="Comida">Comida</option>
+    <!-- <option value="Comida">Comida</option>
     <option value="Servicios">Servicios</option>
     <option value="Salidas">Salidas</option>
     <option value="Educacion">Educación</option>
     <option value="Transporte">Transporte</option>
-    <option value="Trabajo">Trabajo</option>
+    <option value="Trabajo">Trabajo</option> -->
   </select>
 </div>
 <div class="flex flex-col pt-[10px] " >
@@ -190,9 +191,10 @@
     <h1 class="font-bold text-4xl ">Categorias</h1>
     <p class="pb-[10px] mt-[35px] font-semibold">Nombre</p>
     <div class="flex justify-between">
-      <input class="w-10/12 h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400 " type="text" id="new-category">
+      <input class="w-10/12 h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400 " type="text" id="new-category"> 
       <button class="w-20 h-10 text-white bg-emerald-400 rounded" id="add-category">Agregar</button>
     </div>
+    <p class="w-[200px] bg-yellow-400 mt-2 rounded-sm hidden" id="complete-field-category"><i class="fa-solid fa-circle-xmark pl-2"></i> Complete este campo</p>
     <div class="mt-2" >
       <table class=" w-full" >
         <tbody class="w-full" id="table-new-categories">

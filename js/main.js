@@ -12,9 +12,7 @@ const setOperationsAndCategories = (key, array) =>
 
 //array del local//
 const setOfOperations = getOperationsAndCategories("operations") || [];
-console.log(setOfOperations);
 
-//pinta operaciones en el html//
 const operationsData = (operations) => {
   let accGanancias = [];
   let accGastos = [];
@@ -65,6 +63,13 @@ const operationsData = (operations) => {
   }
 };
 
+const validateFieldDescription = () => {
+  if (description.value == "") {
+    showElement("#complete-field");
+  }
+  return description.value !== "";
+};
+
 //obtengo value del form nueva operacion//
 const saveOperationsInformation = (operationId) => {
   return {
@@ -96,7 +101,6 @@ const deleteOperation = (id) => {
   operationsData(myOperations);
 };
 
-//categorias por default//
 let defaultCategories = [
   {
     id: randomId(),
@@ -124,14 +128,23 @@ let defaultCategories = [
   },
 ];
 
-const setOfCategories =
-  getOperationsAndCategories("categories") || defaultCategories;
-console.log(setOfCategories);
+const setOfCategories = getOperationsAndCategories("categories") || defaultCategories;
+
+const validateFielNewCategory = () => {
+  const newCategory = $("#new-category").value;
+  if (newCategory == "") {
+    showElement("#complete-field-category");
+  }
+  return newCategory !== "";
+};
 
 const categoriesData = (defaultCategories) => {
   $("#select-category").innerHTML += "";
   for (const { id, category } of defaultCategories) {
     $("#select-category").innerHTML += `
+    <option  value="${category}">${category} </option>
+    `;
+    $("#category").innerHTML += `
     <option  value="${category}">${category} </option>
     `;
   }
@@ -150,7 +163,6 @@ const sectionCategories = (defaultCategories) => {
   }
 };
 
-//elimina categorias de las secciones correspondientes//
 const deleteCategory = (id) => {
   myCategories = getOperationsAndCategories("categories").filter(
     (categorie) => categorie.id !== id
@@ -160,7 +172,6 @@ const deleteCategory = (id) => {
   categoriesData(myCategories);
 };
 
-//me agrega la nueva categoria//
 const getNewCategory = () => {
   return {
     id: randomId(),
@@ -173,52 +184,45 @@ const saveNewCategory = () => {
   const newCategory = getNewCategory();
   bringCategories.push(newCategory);
   setOperationsAndCategories("categories", bringCategories);
-  // console.log(bringCategories);
+};
+
+//boton editar operaciones//
+const endEdit = () => {
+  const editById = $("#edit-operation").getAttribute("btn-edit");
+  const editSpecificOperation = getOperationsAndCategories("operations").map(
+    (operation) => {
+      if (operation.id === editById) {
+        return saveOperationsInformation(operation.id);
+      }
+      return operation;
+    }
+  );
+  setOperationsAndCategories("operations", editSpecificOperation);
+};
+
+const editOperation = (id) => {
+  showElement(".show-operation");
+  hideElement(".show-categories");
+  hideElement(".show-balance");
+  hideElement(".show-reports");
+  hideElement(".new-operation");
+  hideElement(".add-operation");
+  const editMyOperation = getOperationsAndCategories("operations").find(
+    (operation) => operation.id === id
+  );
+  console.log(editMyOperation);
+  $("#edit-operation").setAttribute("btn-edit", id);
+  $("#description").value = editMyOperation.description;
+  $("#amount").valueAsNumber = editMyOperation.amount;
+  $("#guy").value = editMyOperation.guy;
+  $("#category").value = editMyOperation.category;
+  $("#date").value = editMyOperation.date;
 };
 
 
-//boton editar operaciones//
-const endEdit = () =>{
-  const editById = $("#edit-operation").getAttribute("btn-edit")
-   const editSpecificOperation = getOperationsAndCategories("operations").map(operation => {
-    if(operation.id === editById){
-     return saveOperationsInformation(operation.id)
-    }
-    return operation
-   })
-   setOperationsAndCategories("operations", editSpecificOperation)
-}
-
-
-
-const editOperation = (id) =>{
-showElement(".show-operation")
-hideElement(".show-categories")
-hideElement(".show-balance")
-hideElement(".show-reports")
-hideElement(".new-operation")
-hideElement(".add-operation")
-const editMyOperation = getOperationsAndCategories("operations").find(operation => operation.id === id) 
-  console.log(editMyOperation)
-$("#edit-operation").setAttribute("btn-edit", id)
-  $("#description").value = editMyOperation.description
- $("#amount").valueAsNumber = editMyOperation.amount
- $("#guy").value = editMyOperation. guy
- $("#category").value = editMyOperation.category
- $("#date").value = editMyOperation.date
-
-}
-
-
-
-
-
-// inicializar Mostrar y ocultar secciones, ejecutar btn//
 const openSaved = () => {
-  //operaciones localStorage//
   setOperationsAndCategories("operations", setOfOperations);
   operationsData(setOfOperations);
-  //categorias localStorage//
   setOperationsAndCategories("categories", setOfCategories);
   categoriesData(setOfCategories);
   sectionCategories(setOfCategories);
@@ -255,25 +259,26 @@ const openSaved = () => {
 
   $("#add-new-operation").addEventListener("click", (e) => {
     e.preventDefault();
-    addOperations();
+    if (validateFieldDescription()) {
+      addOperations();
+    }
   });
 
   $("#add-category").addEventListener("click", () => {
-    getNewCategory();
-    saveNewCategory();
-    sectionCategories(getOperationsAndCategories("categories"))
+    if (validateFielNewCategory()) {
+      getNewCategory();
+      saveNewCategory();
+      sectionCategories(getOperationsAndCategories("categories"));
+    }
   });
 
- $("#edit-operation").addEventListener("click",(e) =>{
-  e.preventDefault()
-  endEdit()
-  hideElement(".show-operation");
-  showElement(".show-balance");
-operationsData(getOperationsAndCategories("operations"))
- })
-
-
-
+  $("#edit-operation").addEventListener("click", (e) => {
+    e.preventDefault();
+    endEdit();
+    hideElement(".show-operation");
+    showElement(".show-balance");
+    operationsData(getOperationsAndCategories("operations"));
+  });
 };
 //ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved);
