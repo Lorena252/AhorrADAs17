@@ -23,15 +23,16 @@ const operationsData = (operations) => {
 
     for (const { id, description, amount, guy, category, date } of operations) {
       $("#table-operations").innerHTML += `
-    <tr>
-    <td>${description}</td>
-    <td class="text-emerald-500">${category}</td>
-     <td>${date} </td>
-    <td ${
+    <tr >
+    <td class="pl-[20px] pt-4 font-medium">${description}</td>
+    <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
+    <td></td>
+     <td class="pl-[30px] pt-4 ">${date} </td>
+    <td class="pl-[30px] pt-4 font-bold" ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
-    <td><button class="bg-emerald-300	rounded edit-operation" onclick="editOperation('${id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-    <button class= "bg-red-600 rounded  delete-operation"  onclick="deleteOperation('${id}')"   ><i class="fa-solid fa-trash "></i></button></td>
+    <td class="pl-[50px] pt-4 "><button class="bg-emerald-300	rounded edit-operation" onclick="editOperation('${id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+    <button class= "bg-red-600  rounded  delete-operation"  onclick="deleteOperation('${id}')"   ><i class="fa-solid fa-trash "></i></button></td>
     </tr>
     `;
     }
@@ -168,6 +169,7 @@ const deleteCategory = (id) => {
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
   sectionCategories(myCategories)
+
 };
 
 const getNewCategory = () => {
@@ -218,6 +220,8 @@ const editOperation = (id) => {
 };
 
 
+
+  let filtroDelFiltro = getOperationsAndCategories("operations") 
 const openSaved = () => {
   setOperationsAndCategories("operations", setOfOperations);
   operationsData(setOfOperations);
@@ -272,10 +276,12 @@ const openSaved = () => {
 
   $("#edit-operation").addEventListener("click", (e) => {
     e.preventDefault();
-    endEdit();
-    hideElement(".show-operation");
-    showElement(".show-balance");
-    operationsData(getOperationsAndCategories("operations"));
+    if(validateFieldDescription()){
+      endEdit();
+      hideElement(".show-operation");
+      showElement(".show-balance");
+       operationsData(getOperationsAndCategories("operations"));
+    }
   });
 
  $("#hidden-filters").addEventListener("click", () =>{
@@ -289,6 +295,41 @@ const openSaved = () => {
   showElement("#hidden-filters")
   hideElement("#see-filters")
  })
+
+
+ 
+ 
+ $("#select-type").addEventListener("input", (e) =>{
+  const filterTypeSelected = e.target.value
+  //aca tengo todos//
+  const operationFilter = getOperationsAndCategories("operations")
+  if(filterTypeSelected === "" ){
+    operationsData(operationFilter)
+   }else{
+    const myFilteredOperation = operationFilter.filter(operacion => operacion.guy === filterTypeSelected)
+   filtroDelFiltro.push(myFilteredOperation)
+     operationsData(myFilteredOperation)
+  }
+ 
+  console.log(filtroDelFiltro)
+})
+ 
+$("#select-category").addEventListener("input", (e) =>{
+  const filterCategory = e.target.value
+  const micategory = filtroDelFiltro
+  const cate = getOperationsAndCategories("operations")
+  console.log(micategory)
+  if(filterCategory === ""){
+    operationsData(cate)
+  }else{
+    const miFilterCategory = micategory.filter(operacion => operacion.category === filterCategory && operacion.guy === $("#select-type").value)
+    filtroDelFiltro.push(miFilterCategory)
+    operationsData(miFilterCategory)
+    console.log(miFilterCategory)
+  }
+  
+})
+
 
 
 };

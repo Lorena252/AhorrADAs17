@@ -74,14 +74,14 @@
           <div class=" h-1/2 bg-white p-[15px] sm:w-72 " id="container-filters">
            <p class="font-bold">Tipo</p>
            <select class=" w-full h-8 border border-slate-300 hover:border-slate-400 ... mt-[8px] mb-[8px] outline-1 outline-blue-400  " name="" id="select-type">
-            <option value="Todos">Todos</option>
-            <option value="Gastos">Gatos</option>
+            <option value="">Todos</option>
+            <option value="Gasto">Gasto</option>
             <option value="Ganancia">Ganancia</option>
            </select>
            <p class="font-bold">Categorias</p>    
           
            <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400 "  id="select-category">
-           <option value="Todas" selected="true">Todas</option>   
+           <option value="" selected="true">Todas</option>   
         
            </select>
            <p class="font-bold">Desde</p>
@@ -114,11 +114,12 @@
       <p class="text-center pb-[20px]">Cambia los filtros o agrega operaciones</p>
 </div>
 <div class="w-full  with-operations hidden">
-  <table class=" p-5 table-fixed bg-white w-full">
+  <table class="p-5 table-fixed bg-white w-full">
     <thead>
       <tr>
         <th>Descripcion</th>
         <th>Categoria</th>
+        <th></th>
         <th>Fecha</th>
         <th>Monto</th>
         <th>Acciones</th>
@@ -204,7 +205,7 @@
 </section>
 
 <section id="section-reports" class="show-reports hidden">
-  <div class="h-[500px] flex me-1.5 justify-center pt-[50px]">
+  <div class=" flex me-1.5 justify-center pt-[50px]">
     <div class="w-full ml-4 bg-white  mr-[25px] p-[25px] sm:w-1/2 rounded">
       <h1 class="font-bold text-4xl ">Reportes</h1>
       <div class="justify-center mt-[20px] pt-2.5 container-without-reports ">
@@ -214,8 +215,94 @@
         <h1 class="text-center pt-[20px] ">Operaciones insuficientes</h1>
         <p class="text-center pt-[20px]"> Prueba agregando más operaciones</p>
       </div>
+ 
+<div class="container-all-reports hidden">
+   <div class="container-summary">
+  <p class="text-2xl font-medium">Resumen</p>
+  <table class="table-auto">
+    <tbody>
+      <tr>
+        <td>Categoria con mayor ganancia</td>
+        <td>nombre de esa categoria</td>
+        <td>$0000</td> 
+      </tr>
+
+      <tr>
+        <td>Categoría con mayor gasto</td>
+        <td>nombre de esa categoria</td>
+        <td>$0000</td> 
+      </tr>
+
+      <tr>
+        <td>Categoría con mayor balance</td>
+        <td>nombre de esa categoria</td>
+        <td>$0000</td> 
+      </tr>
+
+      <tr>
+        <td>Mes con mayor ganancia</td>
+        <td>--/--/--</td>
+        <td>$0000</td> 
+      </tr>
+
+      <tr>
+        <td>Mes con mayor gasto</td>
+        <td>--/--/--</td>
+        <td>$0000</td> 
+      </tr>
+
+    </tbody>
+  </table>
+   </div>   
+   
+   <div class="container-totals-by-category">
+    <p class="text-2xl font-medium" >Totales por categoria</p>
+    <table class="table-auto">
+      <thead>
+        <tr>
+          <th>Categoria</th>
+          <th>Gastos</th>
+          <th>Ganancias</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>poner categoria</td>
+          <td>poner ganancia</td>
+          <td>poner gastos</td>
+          <td>poner balance</td>
+        </tr>
+      </tbody>
+    </table>
+   </div>
+
+   <div class="tatals-per-month">
+    <p class="text-2xl font-medium">Totales por mes</p>
+    <table class="table-auto">
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th>Ganancia</th>
+          <th>Gastos</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>--/--/--</td>
+          <td>$000 ganancia</td>
+          <td>$000 gastos</td>
+          <td>$000 balance</td>
+        </tr>
+      </tbody>
+    </table>
+   </div>
+
+ </div>
+
 </div>
-  </div>
+ </div>
 </section>
 
 <script src="js/main.js"></script>
