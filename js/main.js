@@ -5,10 +5,8 @@ const hideElement = (selector) => $(selector).classList.add("hidden");
 
 const randomId = () => self.crypto.randomUUID();
 // localStorage//
-const getOperationsAndCategories = (key) =>
-  JSON.parse(localStorage.getItem(key));
-const setOperationsAndCategories = (key, array) =>
-  localStorage.setItem(key, JSON.stringify(array));
+const getOperationsAndCategories = (key) => JSON.parse(localStorage.getItem(key));
+const setOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array));
 
 //array del local//
 const setOfOperations = getOperationsAndCategories("operations") || [];
@@ -27,7 +25,7 @@ const operationsData = (operations) => {
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
     <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
     <td></td>
-     <td class="pl-[30px] pt-4 ">${date} </td>
+     <td class="pl-[30px] pt-4 ">${date.slice(8,10)}/${date.slice(5,7)}/${date.slice(0,4)} </td>
     <td class="pl-[30px] pt-4 font-bold" ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
@@ -80,6 +78,7 @@ const saveOperationsInformation = (operationId) => {
     category: $("#category").value,
     date: $("#date").value,
   };
+
 };
 
 const addOperations = () => {
@@ -221,13 +220,72 @@ const editOperation = (id) => {
 
 
 
-  let filtroDelFiltro = getOperationsAndCategories("operations") 
+
+const allFilters = () =>{
+  //por tipo/
+  const selectType = $("#select-type").value
+  const filterType =  setOfOperations.filter(operacion =>{
+  if(selectType === ""){
+    return setOfCategories
+  }
+    return selectType === operacion.guy
+  })
+    //por categoria//
+   const selectCategory = $("#select-category").value
+   const filterCategory = filterType.filter((operacion) =>{
+    if(selectCategory === ""){
+      return operacion
+   }
+   return selectCategory === operacion.category
+  })
+
+
+   //return filterCategory
+  //fecha//
+  const inputDate = $("#date-filter").value
+  const filterDate = filterCategory.filter((operacion) =>{
+  if(inputDate === ""){
+    return "operacion"
+  }
+ return new Date(operacion.date) > new Date(inputDate)
+ })
+
+return filterDate
+
+
+//ordenar por//
+
+  
+
+
+}
+
+
+
+
+const inputCurrentDate = () =>{
+  var fecha = new Date();
+  var mes = fecha.getMonth()+1;
+  var dia = fecha.getDate();
+  var ano = fecha.getFullYear();
+  if(dia<10)
+  dia = "0"+ dia;
+  if(mes<10)
+  mes="0"+mes
+  $("#date").value= ano+"-"+mes+"-"+dia; 
+  $("#date-filter").value = ano+"-"+mes+"-"+dia; 
+}
+
+
+
 const openSaved = () => {
   setOperationsAndCategories("operations", setOfOperations);
   operationsData(setOfOperations);
   setOperationsAndCategories("categories", setOfCategories);
   categoriesData(setOfCategories);
   sectionCategories(setOfCategories);
+
+  inputCurrentDate()
 
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories");
@@ -297,37 +355,32 @@ const openSaved = () => {
  })
 
 
- 
- 
+
  $("#select-type").addEventListener("input", (e) =>{
-  const filterTypeSelected = e.target.value
-  //aca tengo todos//
-  const operationFilter = getOperationsAndCategories("operations")
-  if(filterTypeSelected === "" ){
-    operationsData(operationFilter)
-   }else{
-    const myFilteredOperation = operationFilter.filter(operacion => operacion.guy === filterTypeSelected)
-   filtroDelFiltro.push(myFilteredOperation)
-     operationsData(myFilteredOperation)
-  }
- 
-  console.log(filtroDelFiltro)
+  const operationType = allFilters()
+  operationsData(operationType)
+
 })
  
 $("#select-category").addEventListener("input", (e) =>{
-  const filterCategory = e.target.value
-  const micategory = filtroDelFiltro
-  const cate = getOperationsAndCategories("operations")
-  console.log(micategory)
-  if(filterCategory === ""){
-    operationsData(cate)
-  }else{
-    const miFilterCategory = micategory.filter(operacion => operacion.category === filterCategory && operacion.guy === $("#select-type").value)
-    filtroDelFiltro.push(miFilterCategory)
-    operationsData(miFilterCategory)
-    console.log(miFilterCategory)
-  }
-  
+  const operationCategory = allFilters()
+  operationsData(operationCategory)
+
+})
+
+$("#date-filter").addEventListener("input", (e) =>{
+const filterbyDate = allFilters()
+operationsData(filterbyDate)
+ 
+
+
+
+
+})
+
+
+$("#sort-by").addEventListener("input", (e) =>{
+
 })
 
 

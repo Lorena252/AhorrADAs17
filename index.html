@@ -85,9 +85,10 @@
         
            </select>
            <p class="font-bold">Desde</p>
-           <input class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  type="date" id="date-filter">
+           <input class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400" type="date" name="date" class="date"
+            id="date-filter">
            <p class="font-bold">Ordenar por</p>
-           <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  name="" id="">
+           <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  name="" id="sort-by">
             <option value="Mas reciente"> Mas reciente</option>
             <option value="Menos reciente">Menos reciente</option>
             <option value="Mayor Monto">Mayor Monto</option>
@@ -99,7 +100,7 @@
        </div>
     </div>
   
-    <div class="  h-[500px] ml-4  sm:w-1/2 mr-[25px]  p-[25px] bg-white rounded " >
+    <div class=" ml-4  sm:w-1/2 mr-[25px]  p-[25px] bg-white rounded " >
       <div class="flex justify-between ">
              <h1 class="font-bold text-2xl p-2 ">Operaciones</h1>
        <div class="p-2">
@@ -149,7 +150,7 @@
 </div>
 <div  class="flex flex-col pt-[10px] 	">
   <label for="amount">Monto</label>
-  <input  class="h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400  " type="number" name="amount" value="0" id="amount" >
+  <input  class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400  " type="number" name="amount" value="0" id="amount" >
 </div>
 <div class="flex flex-col pt-[10px]  ">
   <label for="guy">Tipo</label>
@@ -171,7 +172,7 @@
 </div>
 <div class="flex flex-col pt-[10px] " >
   <label for="date">Fecha</label>
-<input class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400" type="date" name="date" id="date">
+<input class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400" type="date"  name="date" class="date" id="date">
 </div>
 <div class="flex justify-end ... pt-[20px] ">
   <button class="w-20 h-10 bg-slate-300 mr-[15px] rounded" id="cancel">Cancelar</button>
