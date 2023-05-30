@@ -4,11 +4,10 @@ const showElement = (selector) => $(selector).classList.remove("hidden");
 const hideElement = (selector) => $(selector).classList.add("hidden");
 
 const randomId = () => self.crypto.randomUUID();
-// localStorage//
+
 const getOperationsAndCategories = (key) => JSON.parse(localStorage.getItem(key));
 const setOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array));
 
-//array del local//
 const setOfOperations = getOperationsAndCategories("operations") || [];
 
 const operationsData = (operations) => {
@@ -25,7 +24,7 @@ const operationsData = (operations) => {
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
     <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
     <td></td>
-     <td class="pl-[30px] pt-4 ">${date.slice(8,10)}/${date.slice(5,7)}/${date.slice(0,4)} </td>
+     <td class="pl-[30px] pt-4 ">${date.slice(8, 10)}/${date.slice(5,7)}/${date.slice(0, 4)} </td>
     <td class="pl-[30px] pt-4 font-bold" ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
@@ -56,7 +55,7 @@ const operationsData = (operations) => {
     $("#total-result").classList = "bg-red-600";
     $("#total-result").innerHTML = resultadoTotal;
   } else {
-    $("#total-result").classList = "bg-emerald-600";
+    $("#total-result").classList = "bg-emerald-400";
     $("#total-result").innerHTML = resultadoTotal;
     showElement(".total-positive");
   }
@@ -78,16 +77,13 @@ const saveOperationsInformation = (operationId) => {
     category: $("#category").value,
     date: $("#date").value,
   };
-
 };
 
 const addOperations = () => {
-  //array del local//
   const existingOperation = getOperationsAndCategories("operations");
   const newOperation = saveOperationsInformation();
   existingOperation.push(newOperation);
   setOperationsAndCategories("operations", existingOperation);
-  console.log(existingOperation);
 };
 
 const deleteOperation = (id) => {
@@ -126,7 +122,8 @@ let defaultCategories = [
   },
 ];
 
-const setOfCategories = getOperationsAndCategories("categories") || defaultCategories;
+const setOfCategories =
+  getOperationsAndCategories("categories") || defaultCategories;
 
 const validateFielNewCategory = () => {
   const newCategory = $("#new-category").value;
@@ -154,7 +151,7 @@ const sectionCategories = (defaultCategories) => {
     $("#table-new-categories").innerHTML += `  
    <tr class= "flex justify-between ..."> 
    <td><option  class="text-emerald-500"  value="${category}">${category} </option> </td>
-   <td><button class= "edit-category" ${id}><i class="fa-solid fa-pen-to-square"></i> </button>
+   <td><button class= "edit-category " onclick="editCategory('${id}')"><i class="fa-solid fa-pen-to-square"></i> </button>
    <button class="delete-category" onclick="deleteCategory('${id}')" ><i class="fa-solid fa-trash "></i> </button></td>
     </tr>
     `;
@@ -167,13 +164,12 @@ const deleteCategory = (id) => {
   );
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
-  sectionCategories(myCategories)
-
+  sectionCategories(myCategories);
 };
 
-const getNewCategory = () => {
+const getNewCategory = (categorieId) => {
   return {
-    id: randomId(),
+    id: categorieId ? categorieId : randomId(),
     category: $("#new-category").value,
   };
 };
@@ -185,7 +181,6 @@ const saveNewCategory = () => {
   setOperationsAndCategories("categories", bringCategories);
 };
 
-//boton editar operaciones//
 const endEdit = () => {
   const editById = $("#edit-operation").getAttribute("btn-edit");
   const editSpecificOperation = getOperationsAndCategories("operations").map(
@@ -218,65 +213,103 @@ const editOperation = (id) => {
   $("#date").value = editMyOperation.date;
 };
 
+const endEditCategory = () => {
+  const editCategoryId = $("#btn-edit-category").getAttribute("edit-category");
+  const editCategorySpecificId = getOperationsAndCategories("categories").map(
+    (category) => {
+      if (category.id === editCategoryId) {
+        return getNewCategory(category.id);
+      }
+      return category;
+    }
+  );
+  setOperationsAndCategories("categories", editCategorySpecificId);
+};
 
+const editCategory = (id) => {
+  showElement(".btns-edit-category");
+  showElement("#title-edit-category");
+  hideElement(".title-categories");
+  hideElement("#add-category");
+  hideElement("#table-new-categories");
+  const editSpecifiCategory = getOperationsAndCategories("categories").find(
+    (categorie) => categorie.id === id
+  );
+  console.log(editSpecifiCategory);
+  $("#btn-edit-category").setAttribute("edit-category", id);
+  $("#new-category").value = editSpecifiCategory.category;
+};
 
+const allFilters = () => {
+  const selectType = $("#select-type").value;
+  const filterType = setOfOperations.filter((operacion) => {
+    if (selectType === "") {
+      return setOfCategories;
+    }
+    return selectType === operacion.guy;
+  });
 
-const allFilters = () =>{
-  //por tipo/
-  const selectType = $("#select-type").value
-  const filterType =  setOfOperations.filter(operacion =>{
-  if(selectType === ""){
-    return setOfCategories
-  }
-    return selectType === operacion.guy
-  })
-    //por categoria//
-   const selectCategory = $("#select-category").value
-   const filterCategory = filterType.filter((operacion) =>{
-    if(selectCategory === ""){
-      return operacion
-   }
-   return selectCategory === operacion.category
-  })
+  const selectCategory = $("#select-category").value;
+  const filterCategory = filterType.filter((operacion) => {
+    if (selectCategory === "") {
+      return operacion;
+    }
+    return selectCategory === operacion.category;
+  });
 
+ const inputDate = $("#date-filter").value ;
+  const filterDate = filterCategory.filter((operacion) => {
+    if (inputDate === "" ? "" : new Date()) {
+      return operacion;
+    }
+    return new Date(operacion.date) > new Date(inputDate) ;
+  });
 
-   //return filterCategory
-  //fecha//
-  const inputDate = $("#date-filter").value
-  const filterDate = filterCategory.filter((operacion) =>{
-  if(inputDate === ""){
-    return "operacion"
-  }
- return new Date(operacion.date) > new Date(inputDate)
- })
+  const selectSortBy = $("#sort-by").value;
+  const filterSort = filterDate.sort((a, b) => {
+    if (selectSortBy === "Menos reciente") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (selectSortBy === "Mas reciente") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (selectSortBy === "Menor monto") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (selectSortBy === "Mayor monto") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (selectSortBy === "Z/A") {
+      return a.description < b.description ? 1 : -1;
+    }
+    if (selectSortBy === "A/Z") {
+      return a.description > b.description ? 1 : -1;
+    }
+  });
+  return filterSort;
+};
 
-return filterDate
-
-
-//ordenar por//
-
-  
-
-
-}
-
-
-
-
-const inputCurrentDate = () =>{
+const inputCurrentDate = () => {
   var fecha = new Date();
-  var mes = fecha.getMonth()+1;
+  var mes = fecha.getMonth() + 1;
   var dia = fecha.getDate();
   var ano = fecha.getFullYear();
-  if(dia<10)
-  dia = "0"+ dia;
-  if(mes<10)
-  mes="0"+mes
-  $("#date").value= ano+"-"+mes+"-"+dia; 
-  $("#date-filter").value = ano+"-"+mes+"-"+dia; 
-}
+  if (dia < 10) dia = "0" + dia;
+  if (mes < 10) mes = "0" + mes;
+  $("#date").value = ano + "-" + mes + "-" + dia;
+  $("#date-filter").value = ano + "-" + mes + "-" + dia;
+};
+
+// HACER REPORTES//
 
 
+
+
+
+
+
+
+//
 
 const openSaved = () => {
   setOperationsAndCategories("operations", setOfOperations);
@@ -284,11 +317,16 @@ const openSaved = () => {
   setOperationsAndCategories("categories", setOfCategories);
   categoriesData(setOfCategories);
   sectionCategories(setOfCategories);
-
-  inputCurrentDate()
+  inputCurrentDate();
 
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories");
+    showElement(".title-categories");
+    showElement("#table-new-categories");
+    showElement("#add-category");
+
+    hideElement(".btns-edit-category");
+    hideElement("#title-edit-category");
     hideElement(".show-balance");
     hideElement(".show-reports");
     hideElement(".show-operation");
@@ -334,57 +372,61 @@ const openSaved = () => {
 
   $("#edit-operation").addEventListener("click", (e) => {
     e.preventDefault();
-    if(validateFieldDescription()){
+    if (validateFieldDescription()) {
       endEdit();
       hideElement(".show-operation");
       showElement(".show-balance");
-       operationsData(getOperationsAndCategories("operations"));
+      operationsData(getOperationsAndCategories("operations"));
     }
   });
 
- $("#hidden-filters").addEventListener("click", () =>{
- hideElement("#container-filters")
- hideElement("#hidden-filters")
- showElement("#see-filters")
- })
+  $("#btn-edit-category").addEventListener("click", (e) => {
+    e.preventDefault();
+    endEditCategory();
+    sectionCategories(getOperationsAndCategories("categories"));
+    hideElement(".btns-edit-category");
+    hideElement("#title-edit-category");
+    showElement(".title-categories");
+    showElement("#add-category");
+    showElement("#table-new-categories");
+  });
 
- $("#see-filters").addEventListener("click", () =>{
-  showElement("#container-filters")
-  showElement("#hidden-filters")
-  hideElement("#see-filters")
- })
+  $("#hidden-filters").addEventListener("click", () => {
+    hideElement("#container-filters");
+    hideElement("#hidden-filters");
+    showElement("#see-filters");
+  });
 
+  $("#see-filters").addEventListener("click", () => {
+    showElement("#container-filters");
+    showElement("#hidden-filters");
+    hideElement("#see-filters");
+  });
 
+  $("#select-type").addEventListener("input", () => {
+    const operationType = allFilters();
+    operationsData(operationType);
 
- $("#select-type").addEventListener("input", (e) =>{
-  const operationType = allFilters()
-  operationsData(operationType)
+  });
 
-})
- 
-$("#select-category").addEventListener("input", (e) =>{
-  const operationCategory = allFilters()
-  operationsData(operationCategory)
+  $("#select-category").addEventListener("input", () => {
+    const operationCategory = allFilters();
+    operationsData(operationCategory);
+  });
 
-})
+  $("#date-filter").addEventListener("input", () => {
+    const filterbyDate = allFilters();
+    operationsData(filterbyDate);
+  });
 
-$("#date-filter").addEventListener("input", (e) =>{
-const filterbyDate = allFilters()
-operationsData(filterbyDate)
- 
-
-
-
-
-})
-
-
-$("#sort-by").addEventListener("input", (e) =>{
-
-})
-
+  $("#sort-by").addEventListener("input", () => {
+    const sort = allFilters();
+    operationsData(sort);
+  });
 
 
 };
+
+
 //ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved);

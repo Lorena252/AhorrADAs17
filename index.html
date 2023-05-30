@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/ee979af6a2.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="assets/3e06c873-7a0d-4d10-a996-eeb7d2cd6d21.jpg">
     <title>ahorrADAs</title>
 </head>
 <body class="bg-slate-300	">   
@@ -57,7 +58,7 @@
                 <p >Total</p> 
               </div> 
                <div class="flex  total-containers">
-                <p class="bg-emerald-600 total-positive hidden">+</p>
+                <p class="bg-emerald-400 total-positive hidden">+</p>
                 <p class="" id="total-result">0</p>
               </div>
             </div>
@@ -91,8 +92,8 @@
            <select class="w-full h-8 border border-slate-300 hover:border-slate-400 ...  mt-[8px] mb-[8px] outline-1 outline-blue-400  "  name="" id="sort-by">
             <option value="Mas reciente"> Mas reciente</option>
             <option value="Menos reciente">Menos reciente</option>
-            <option value="Mayor Monto">Mayor Monto</option>
-            <option value="Menos Monto">Menos Monto</option>
+            <option value="Mayor monto">Mayor Monto</option>
+            <option value="Menor monto">Menor Monto</option>
             <option value="A/Z">A/Z</option>
             <option value="Z/A">Z/A</option>
            </select>
@@ -162,12 +163,7 @@
 <div class="flex flex-col pt-[10px] ">
   <label for="category">Categoria</label>
   <select class="h-8 border border-slate-300 hover:border-slate-400 ... outline-1 outline-blue-400 "  name="" id="category">
-    <!-- <option value="Comida">Comida</option>
-    <option value="Servicios">Servicios</option>
-    <option value="Salidas">Salidas</option>
-    <option value="Educacion">Educación</option>
-    <option value="Transporte">Transporte</option>
-    <option value="Trabajo">Trabajo</option> -->
+
   </select>
 </div>
 <div class="flex flex-col pt-[10px] " >
@@ -184,14 +180,19 @@
 </div>
 </section>
 
-<section id="section-categories" class="show-categories hidden ">
+<section id="section-categories" class="show-categories hidden " >
   <div class="flex me-1.5 justify-center pt-[50px]">
   <div class="w-full mr-[25px] ml-4 bg-white p-[25px] sm:w-1/2 rounded">
-    <h1 class="font-bold text-4xl ">Categorias</h1>
+    <h1 class="font-bold text-4xl  hidden tittle-category title-categories">Categorias</h1>
+    <h1 class="font-bold text-4xl hidden " id="title-edit-category">Editar categoría</h1>
     <p class="pb-[10px] mt-[35px] font-semibold">Nombre</p>
-    <div class="flex justify-between">
+    <div class="flex justify-between ">
       <input class="w-10/12 h-8 border border-slate-300 hover:border-slate-400 ...  outline-1 outline-blue-400 " type="text" id="new-category"> 
-      <button class="w-20 h-10 text-white bg-emerald-400 rounded" id="add-category">Agregar</button>
+      <button class="w-20 h-10 text-white bg-emerald-400 rounded" id="add-category" >Agregar</button>
+   <div class="flex hidden btns-edit-category ">
+          <a href="index.html" ><button class="w-20 h-10 ml-2 text-white bg-emerald-400 rounded  " id="btn-cancelar-edit" >  Cancelar</button></a>
+      <button  class="w-20 h-10 ml-2 text-white bg-emerald-400 rounded " id="btn-edit-category">Editar</button>
+   </div>
     </div>
     <p class="w-[200px] bg-yellow-400 mt-2 rounded-sm hidden" id="complete-field-category"><i class="fa-solid fa-circle-xmark pl-2"></i> Complete este campo</p>
     <div class="mt-2" >
@@ -200,24 +201,24 @@
         </tbody>
       </table>
     </div>
-
   </div>
 </div>
 </section>
 
 <section id="section-reports" class="show-reports hidden">
   <div class=" flex me-1.5 justify-center pt-[50px]">
-    <div class="w-full ml-4 bg-white  mr-[25px] p-[25px] sm:w-1/2 rounded">
+    <div class="w-full ml-4 bg-white  mr-[25px] p-[25px] sm:w-1/2 rounded ">
       <h1 class="font-bold text-4xl ">Reportes</h1>
       <div class="justify-center mt-[20px] pt-2.5 container-without-reports ">
-        <div class=" flex justify-center">
+        <div class="container-without-results hidden ">
+        <div class=" flex justify-center  ">
            <img src="assets/undraw_Charts_re_5qe9.png" alt="">     
-        </div>     
+            </div> 
         <h1 class="text-center pt-[20px] ">Operaciones insuficientes</h1>
         <p class="text-center pt-[20px]"> Prueba agregando más operaciones</p>
+        </div>
       </div>
- 
-<div class="container-all-reports hidden">
+<div class="container-all-reports ">
    <div class="container-summary">
   <p class="text-2xl font-medium">Resumen</p>
   <table class="table-auto">
@@ -270,8 +271,8 @@
       <tbody>
         <tr>
           <td>poner categoria</td>
-          <td>poner ganancia</td>
           <td>poner gastos</td>
+          <td>poner ganancias</td>
           <td>poner balance</td>
         </tr>
       </tbody>
