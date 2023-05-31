@@ -5,8 +5,10 @@ const hideElement = (selector) => $(selector).classList.add("hidden");
 
 const randomId = () => self.crypto.randomUUID();
 
-const getOperationsAndCategories = (key) => JSON.parse(localStorage.getItem(key));
-const setOperationsAndCategories = (key, array) => localStorage.setItem(key, JSON.stringify(array));
+const getOperationsAndCategories = (key) =>
+  JSON.parse(localStorage.getItem(key));
+const setOperationsAndCategories = (key, array) =>
+  localStorage.setItem(key, JSON.stringify(array));
 
 const setOfOperations = getOperationsAndCategories("operations") || [];
 
@@ -20,12 +22,15 @@ const operationsData = (operations) => {
 
     for (const { id, description, amount, guy, category, date } of operations) {
       $("#table-operations").innerHTML += `
-    <tr >
+    <tr>
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
     <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
-    <td></td>
-     <td class="pl-[30px] pt-4 ">${date.slice(8, 10)}/${date.slice(5,7)}/${date.slice(0, 4)} </td>
-    <td class="pl-[30px] pt-4 font-bold" ${
+    <td class="max-sm:hidden"></td>
+     <td class="pl-[30px] pt-4 max-sm:pl-[10px]">${date.slice(
+       8,
+       10
+     )}/${date.slice(5, 7)}/${date.slice(0, 4)} </td>
+    <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]" ${
       guy == "Ganancia" ? accGanancias.push(amount) : accGastos.push(amount)
     }   > ${guy == "Gasto" ? "-" : "+"}  $ ${amount}</td>
     <td class="pl-[50px] pt-4 "><button class="bg-emerald-300	rounded edit-operation" onclick="editOperation('${id}')"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -39,23 +44,36 @@ const operationsData = (operations) => {
   }
 
   let acc = 0;
-  for (let i = 0; i < accGanancias.length; i++) {
-    acc = acc + accGanancias[i];
-    $("#paint-earnings").innerHTML = acc;
-  }
-
-  let accG = 0;
-  for (let i = 0; i < accGastos.length; i++) {
-    accG = accG + accGastos[i];
-    $("#paint-expenses").innerHTML = accG;
-  }
-
-  let resultadoTotal = acc - accG;
-  if (resultadoTotal < 0) {
-    $("#total-result").classList = "bg-red-600";
-    $("#total-result").innerHTML = resultadoTotal;
+  if (accGanancias == 0) {
+    $("#paint-earnings").innerHTML = "0";
   } else {
-    $("#total-result").classList = "bg-emerald-400";
+    for (let i = 0; i < accGanancias.length; i++) {
+      acc = acc + accGanancias[i];
+      $("#paint-earnings").innerHTML = acc;
+    }
+  }
+  let accG = 0;
+
+  if (accGastos == 0) {
+    $("#paint-expenses").innerHTML = "0";
+  } else {
+    for (let i = 0; i < accGastos.length; i++) {
+      accG = accG + accGastos[i];
+      $("#paint-expenses").innerHTML = accG;
+    }
+  }
+  let resultadoTotal = acc - accG;
+
+  if (resultadoTotal < 0) {
+    $("#total-result").classList = "text-rose-600";
+    $("#total-result").innerHTML = resultadoTotal;
+    hideElement(".total-positive");
+  } else if (resultadoTotal === 0) {
+    $("#total-result").innerHTML = "$0";
+    $("#total-result").classList = "text-black";
+    hideElement(".total-positive");
+  } else {
+    $("#total-result").classList = "text-teal-400";
     $("#total-result").innerHTML = resultadoTotal;
     showElement(".total-positive");
   }
@@ -257,12 +275,12 @@ const allFilters = () => {
     return selectCategory === operacion.category;
   });
 
- const inputDate = $("#date-filter").value ;
+  const inputDate = $("#date-filter").value;
   const filterDate = filterCategory.filter((operacion) => {
     if (inputDate === "" ? "" : new Date()) {
       return operacion;
     }
-    return new Date(operacion.date) > new Date(inputDate) ;
+    return new Date(operacion.date) > new Date(inputDate);
   });
 
   const selectSortBy = $("#sort-by").value;
@@ -299,17 +317,6 @@ const inputCurrentDate = () => {
   $("#date").value = ano + "-" + mes + "-" + dia;
   $("#date-filter").value = ano + "-" + mes + "-" + dia;
 };
-
-// HACER REPORTES//
-
-
-
-
-
-
-
-
-//
 
 const openSaved = () => {
   setOperationsAndCategories("operations", setOfOperations);
@@ -368,6 +375,7 @@ const openSaved = () => {
       saveNewCategory();
       sectionCategories(getOperationsAndCategories("categories"));
     }
+    $("#new-category").value = "";
   });
 
   $("#edit-operation").addEventListener("click", (e) => {
@@ -406,7 +414,6 @@ const openSaved = () => {
   $("#select-type").addEventListener("input", () => {
     const operationType = allFilters();
     operationsData(operationType);
-
   });
 
   $("#select-category").addEventListener("input", () => {
@@ -423,10 +430,6 @@ const openSaved = () => {
     const sort = allFilters();
     operationsData(sort);
   });
-
-
 };
 
-
-//ejecuta cuando se carga el dom//
 window.addEventListener("load", openSaved);
