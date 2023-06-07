@@ -24,7 +24,7 @@ const operationsData = (operations) => {
       $("#table-operations").innerHTML += `
     <tr>
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
-    <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
+    <td class="text-emerald-500 pl-[30px] pt-4 value ="${category}" ">${category}</td>
     <td class="max-sm:hidden"></td>
      <td class="pl-[30px] pt-4 max-sm:pl-[10px]">${date.slice(
        8,
@@ -157,18 +157,22 @@ const categoriesData = (defaultCategories) => {
     $("#select-category").innerHTML += `
     <option  value="${category}">${category} </option>
     `;
+    //hoy sabado//
+
+    //
     $("#category").innerHTML += `
-    <option  value="${category}">${category} </option>
+    <option  value="${category}" id=" ${id}">${category} </option>
     `;
   }
 };
 
 const sectionCategories = (defaultCategories) => {
   $("#table-new-categories").innerHTML = "";
+
   for (const { id, category } of defaultCategories) {
-    $("#table-new-categories").innerHTML += `  
-   <tr class= "flex justify-between ..."> 
-   <td><option  class="text-emerald-500"  value="${category}">${category} </option> </td>
+    $("#table-new-categories").innerHTML += `
+   <tr class= "flex justify-between ...">
+   <td><option  class="text-emerald-500"  value="${category}" " )>${category} </option> </td>
    <td><button class= "edit-category " onclick="editCategory('${id}')"><i class="fa-solid fa-pen-to-square"></i> </button>
    <button class="delete-category" onclick="deleteCategory('${id}')" ><i class="fa-solid fa-trash "></i> </button></td>
     </tr>
@@ -180,6 +184,7 @@ const deleteCategory = (id) => {
   myCategories = getOperationsAndCategories("categories").filter(
     (categorie) => categorie.id !== id
   );
+  console.log(myCategories);
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
   sectionCategories(myCategories);
@@ -250,13 +255,68 @@ const editCategory = (id) => {
   hideElement(".title-categories");
   hideElement("#add-category");
   hideElement("#table-new-categories");
+
   const editSpecifiCategory = getOperationsAndCategories("categories").find(
     (categorie) => categorie.id === id
   );
   console.log(editSpecifiCategory);
+
   $("#btn-edit-category").setAttribute("edit-category", id);
   $("#new-category").value = editSpecifiCategory.category;
 };
+
+//REPORTES//
+
+const cantidadCategories = () => {
+  $(".categoria-mayor").innerHTML = "";
+  let categorias = setOfCategories;
+  let nombreCategoria = "";
+  let nuevoObj = {};
+  let categoria = "";
+
+  for (let i = 0; i < categorias.length; i++) {
+    const operacionesFiltradas = setOfOperations.filter(
+      (operacion) => operacion.category === categorias[i].category
+    );
+    //console.log(operacionesFiltradas) //Me filtra por categorias (separadas)
+
+    let monto = 0;
+    let montoGasto = 0;
+
+    for (const category of operacionesFiltradas) {
+      guy = category.guy;
+      guy === "Ganancia" ? (monto += category.amount) : 0;
+      nombreCategoria = category.category;
+      console.log(nombreCategoria)
+      // if (nombreCategoria === categoria.category) {
+     
+      //   nuevoObj[nombreCategoria] = monto;
+      // }
+      nuevoObj[nombreCategoria] = monto;
+    }
+  }
+  console.log(nuevoObj);
+  let montoMayorGanancia = 0;
+  let categoriaMayorGanancia = "";
+
+  for (const key in nuevoObj) {
+    if (nuevoObj[key] > montoMayorGanancia) {
+      montoMayorGanancia = nuevoObj[key];
+      categoriaMayorGanancia = key;
+    }
+  }
+  $(".categoria-mayor").innerHTML = `
+<td>Categoria con mayor ganancia</td>
+<td > ${categoriaMayorGanancia}</td>
+<td> $${montoMayorGanancia}</td>
+`;
+
+  return categoriaMayorGanancia + " " + montoMayorGanancia;
+};
+
+console.log(cantidadCategories());
+
+//
 
 const allFilters = () => {
   const selectType = $("#select-type").value;
@@ -277,9 +337,9 @@ const allFilters = () => {
 
   const inputDate = $("#date-filter").value;
   const filterDate = filterCategory.filter((operacion) => {
-    if (inputDate === "" ? "" : new Date()) {
-      return operacion;
-    }
+    // if (inputDate === "" ? "" : new Date()) {
+    //    return operacion;
+    // }
     return new Date(operacion.date) > new Date(inputDate);
   });
 
