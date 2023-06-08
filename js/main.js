@@ -21,13 +21,10 @@ const operationsData = (operations) => {
     showElement(".with-operations");
 
     for (const { id, description, amount, guy, category, date } of operations) {
-    // let categorySelected = getOperationsAndCategories("categories").find(cate=> cate.id === category.category)
-    // console.log(category)
-
       $("#table-operations").innerHTML += `
     <tr>
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
-    <td class="text-emerald-500 pl-[30px] pt-4  value ="${category}" ">${category}</td>
+    <td class="text-emerald-500 pl-[30px] pt-4  value ="${category} ">${category}</td>
     <td class="max-sm:hidden"></td>
      <td class="pl-[30px] pt-4 max-sm:pl-[10px]">${date.slice(
        8,
@@ -90,14 +87,12 @@ const validateFieldDescription = () => {
 };
 
 const saveOperationsInformation = (operationId) => {
-// const categoryId = $("#category").options[$("#category").selectedIndex].getAttribute("data-id")
-
   return {
     id: operationId ? operationId : randomId(),
     description: $("#description").value,
     amount: $("#amount").valueAsNumber,
     guy: $("#guy").value,
-    category: $("#category").value, 
+    category: $("#category").value,
     date: $("#date").value,
   };
 };
@@ -162,11 +157,8 @@ const categoriesData = (defaultCategories) => {
     $("#select-category").innerHTML += `
     <option  value="${category}"   id=" ${id}" >${category} </option>
     `;
-    //hoy sabado//
-
-    //
     $("#category").innerHTML += `
-    <option  value="${category}" data-id=" ${id}">${category} </option>
+    <option  value="${category}" data-id="${id}" >${category} </option>
     `;
   }
 };
@@ -186,7 +178,7 @@ const sectionCategories = (defaultCategories) => {
 
 const deleteCategory = (id) => {
   myCategories = getOperationsAndCategories("categories").filter(
-    (categorie) => categorie.id !== id        
+    (categorie) => categorie.id !== id
   );
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
@@ -221,7 +213,6 @@ const endEdit = () => {
 };
 
 const editOperation = (id) => {
-
   showElement(".show-operation");
   hideElement(".show-categories");
   hideElement(".show-balance");
@@ -263,64 +254,129 @@ const editCategory = (id) => {
   const editSpecifiCategory = getOperationsAndCategories("categories").find(
     (categorie) => categorie.id === id
   );
-  console.log(editSpecifiCategory);
+  console.log(editSpecifiCategory.category);
 
   $("#btn-edit-category").setAttribute("edit-category", id);
   $("#new-category").value = editSpecifiCategory.category;
 };
 
-//REPORTES//
+const cantidasPorMes = () => {
+  let objMesGanancias = {};
+  let objMesGastos = {};
+  let objMesBalance = {};
+  let mesBalance = "";
+  let data = setOfOperations;
+  let nombreMes = "";
+  $(".totales-por-mes").innerHTML = "";
+
+  for (let i = 0; i < data.length; i++) {
+    let mesMayorGasto = 0;
+    let mesMayorGanancia = 0;
+    const mesesFiltrados = setOfOperations.filter(
+      (operation) => operation.date === data[i].date
+    );
+
+    for (const date of mesesFiltrados) {
+      guy = date.guy;
+      operation = date.amount;
+      fecha = date.date.slice(0, 7);
+      if (fecha === fecha && guy === "Ganancia") {
+        mesMayorGanancia += operation;
+        nombreMes = fecha;
+        objMesGanancias[nombreMes] = mesMayorGanancia;
+      } else if (fecha === fecha && guy === "Gasto") {
+        mesMayorGasto += operation;
+        nombreMes = fecha;
+        objMesGastos[nombreMes] = mesMayorGasto;
+      }
+      mesBalance = mesMayorGanancia - mesMayorGasto;
+      nombreMes = fecha;
+      objMesBalance[nombreMes] = date.amount;
+    }
+
+    $(".totales-por-mes").innerHTML += `
+<td class="pl-4 font-medium">${nombreMes}   </td> 
+ <td class="pl-6 text-teal-400">${mesMayorGanancia} </td>
+<td class="pl-6 text-rose-500"> ${mesMayorGasto} </td>
+<td>${mesBalance}</td> 
+`;
+  }
+
+  let mesMasGanancia = "";
+  let mesMontoGanancia = 0;
+  for (const key in objMesGanancias) {
+    if (objMesGanancias[key] > mesMontoGanancia) {
+      mesMontoGanancia = objMesGanancias[key];
+      mesMasGanancia = key;
+    }
+  }
+
+  $(".mes-mayor-ganancia").innerHTML = `
+<td class="font-medium">Mes con mayor ganancia</td>
+<td>${mesMasGanancia}</td>
+<td class= "text-teal-400" >${mesMontoGanancia}</td> 
+`;
+  let mesMayorGasto = "";
+  let mesMontoGasto = 0;
+  for (const key in objMesGastos) {
+    if (objMesGastos[key] > mesMontoGasto) {
+      mesMontoGasto = objMesGastos[key];
+      mesMayorGasto = key;
+    }
+  }
+
+  $(".mes-mayor-gasto").innerHTML = `
+<td class="font-medium">Mes con mayor gasto</td>
+<td>${mesMayorGasto}</td>
+<td class="text-teal-400">${mesMontoGasto}</td> 
+`;
+};
+cantidasPorMes();
 
 const cantidadCategories = () => {
-  $(".totales-por-categorias").innerHTML =""    
+
+  $(".totales-por-categorias").innerHTML = "";
   $(".categoria-mayor").innerHTML = "";
   let categorias = setOfCategories;
-
   let nuevoObj = {};
   let categoria = "";
   let objGasto = {};
   let objBalance = {};
-   let montoGanancia = 0;
+  let montoGanancia = 0;
   let montoGasto = 0;
-   let mayorBalance = 0; 
-    let nombreCategoria = "";
-  
-  for (let i = 0; i < categorias.length; i++) { 
-    
+  let mayorBalance = 0;
+  let nombreCategoria = "";
+
+  for (let i = 0; i < categorias.length; i++) {
     const operacionesFiltradas = setOfOperations.filter(
       (operacion) => operacion.category === categorias[i].category
-    );            
-  for (const category of operacionesFiltradas) {     
+    );
+    for (const category of operacionesFiltradas) {
       guy = category.guy;
-      date = category.date.slice(0, 7);     
       if (guy === "Ganancia") {
-         montoGanancia += category.amount;
+        montoGanancia += category.amount;
         nombreCategoria = category.category;
         nuevoObj[nombreCategoria] = montoGanancia;
       } else if (guy === "Gasto") {
         montoGasto += category.amount;
         nombreCategoria = category.category;
-        objGasto[nombreCategoria] = montoGasto;      
-      }     
+        objGasto[nombreCategoria] = montoGasto;
+      }
       mayorBalance = montoGanancia - montoGasto;
       nombreCategoria = category.category;
-      objBalance[nombreCategoria] = mayorBalance;   
-        
+      objBalance[nombreCategoria] = mayorBalance;
     }
-  
-   $(".totales-por-categorias").innerHTML += `
+
+    $(".totales-por-categorias").innerHTML += `
      <tr>
-      <td class="pl-4 ">${nombreCategoria} </td>
-      <td class="pl-4">${montoGasto = 0 ? "0" : montoGasto} </td>
-      <td class="pl-4">  ${montoGanancia = 0 ? "0" : montoGanancia} </td>
+      <td class="pl-4 font-medium">${nombreCategoria} </td>
+      <td class="pl-4 text-rose-500 ">${(montoGasto = 0 ? "0" : montoGasto)} </td>
+      <td class="pl-4 text-teal-400" >  ${(montoGanancia = 0 ? "0" : montoGanancia)} </td>
       <td > ${mayorBalance} </td>
     </tr>
-     `;  
+     `;
   }
 
-
-  let montoMayorBalance = 0;
-  let categoriaMayorBalance = "";
 
   let montoMayorGanancia = 0;
   let categoriaMayorGanancia = "";
@@ -328,48 +384,46 @@ const cantidadCategories = () => {
   let montoMayorGasto = 0;
   let categoriaMayorGasto = "";
 
+  let montoMayorBalance = 0;
+  let categoriaMayorBalance = "";
+
   for (const key in nuevoObj) {
     if (nuevoObj[key] > montoMayorGanancia) {
       montoMayorGanancia = nuevoObj[key];
       categoriaMayorGanancia = key;
     }
+    $(".categoria-mayor").innerHTML = `
+   <td class="font-medium">Categoria con mayor ganancia</td>
+    <td class="pl-4 text-emerald-500 "> ${categoriaMayorGanancia}</td>
+   <td class="text-teal-400"> $${montoMayorGanancia}</td>
+    `;
   }
+
   for (const key in objGasto) {
     if (objGasto[key] > montoMayorGasto) {
       montoMayorGasto = objGasto[key];
       categoriaMayorGasto = key;
     }
+    $(".categoria-mayor-gasto").innerHTML = `
+    <td class="font-medium">Categoria con mayor gasto</td>
+     <td class="pl-4 text-emerald-500">${categoriaMayorGasto}</td>
+    <td class="text-rose-500"> $${montoMayorGasto}</td>
+     `;
   }
   for (const key in objBalance) {
     if (objBalance[key] > montoMayorBalance) {
       montoMayorBalance = objBalance[key];
       categoriaMayorBalance = key;
     }
-  }
-  $(".categoria-mayor").innerHTML = `
-   <td class="font-medium">Categoria con mayor ganancia</td>
-    <td class="pl-4 text-emerald-500 "> ${categoriaMayorGanancia}</td>
-   <td class="text-teal-400"> $${montoMayorGanancia}</td>
-    `;
 
-  $(".categoria-mayor-gasto").innerHTML = `
-    <td class="font-medium">Categoria con mayor gasto</td>
-     <td class="pl-4 text-emerald-500">${categoriaMayorGasto}</td>
-    <td class="text-rose-500"> $${montoMayorGasto}</td>
-     `;
-
-  $(".categoria-mayor-balance").innerHTML = `
+    $(".categoria-mayor-balance").innerHTML = `
       <td class="font-medium" >Categoría con mayor balance</td>
-     <td class="pl-4 text-emerald-500 ">${categoriaMayorBalance}</td>
-     <td class="font-medium">$${montoMayorBalance}</td>  
+     <td class="pl-4 text-emerald-500 ">${nombreCategoria}</td>
+     <td class="font-medium">$${mayorBalance}</td>  
      `;
-//  return categoriaMayorGanancia + " " + montoMayorGanancia;
-
+  }
 };
-
-
-
-//
+cantidadCategories();
 
 const allFilters = () => {
   const selectType = $("#select-type").value;
@@ -435,7 +489,7 @@ const openSaved = () => {
   categoriesData(setOfCategories);
   sectionCategories(setOfCategories);
   inputCurrentDate();
- 
+
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories");
     showElement(".title-categories");
@@ -447,7 +501,6 @@ const openSaved = () => {
     hideElement(".show-balance");
     hideElement(".show-reports");
     hideElement(".show-operation");
-   
   });
 
   $("#balance").addEventListener("click", () => {
@@ -457,13 +510,12 @@ const openSaved = () => {
     hideElement(".show-operation");
   });
 
+
   $("#reports").addEventListener("click", () => {
-    cantidadCategories();
     showElement(".show-reports");
     hideElement(".show-balance");
     hideElement(".show-categories");
     hideElement(".show-operation");
-    //cantidadCategories();
 
   });
 

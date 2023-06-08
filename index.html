@@ -210,8 +210,8 @@
   <div class=" flex me-1.5 justify-center pt-[50px]">
     <div class="w-full ml-4 bg-white  mr-[25px] p-[25px] sm:w-1/2 rounded ">
       <h1 class="font-bold text-4xl ">Reportes</h1>
-      <div class="justify-center mt-[20px] pt-2.5 container-without-reports ">
-        <div class="container-without-results  hidden">
+      <div class="justify-center mt-[20px] pt-2.5 container-without-reports hidden ">
+        <div class="container-without-results  ">
         <div class=" flex justify-center  ">
            <img src="assets/undraw_Charts_re_5qe9.png" alt="">     
             </div> 
@@ -219,8 +219,8 @@
         <p class="text-center pt-[20px]"> Prueba agregando más operaciones</p>
         </div>
       </div>
-      <div class="container-all-reports ">
-        <div class="container-summary">
+      <div class="container-all-reports  ">
+        <div class=" p-5 container-summary">
        <p class="text-2xl font-medium">Resumen</p>
        <table class="table-auto ">
          <tbody>
@@ -233,31 +233,26 @@
            <tr class="categoria-mayor-balance"> 
            </tr>
      
-           <tr>
-             <td>Mes con mayor ganancia</td>
-             <td>--/--/--</td>
-             <td>$0000</td> 
+           <tr class="mes-mayor-ganancia">
            </tr>
      
-           <tr>
-             <td>Mes con mayor gasto</td>
-             <td>--/--/--</td>
-             <td>$0000</td> 
+           <tr class="mes-mayor-gasto">
+
            </tr>
      
          </tbody>
        </table>
         </div>   
         
-        <div class="container-totals-by-category">
+        <div class="p-5 container-totals-by-category">
          <p class="text-2xl font-medium" >Totales por categoria</p>
          <table class="table-auto">
            <thead>
              <tr>
-               <th>Categoria</th>
-               <th>Gastos</th>
-               <th>Ganancias</th>
-               <th>Balance</th>
+               <th class="pl-5" >Categoria</th>
+               <th class="pl-5">Gastos</th>
+               <th class="pl-5" >Ganancias</th>
+               <th class="pl-5" >Balance</th>
              </tr>
            </thead>
            <tbody  class="width-full totales-por-categorias">
@@ -266,23 +261,19 @@
          </table>
         </div>
      
-        <div class="tatals-per-month">
+        <div class="p-5 tatals-per-month">
          <p class="text-2xl font-medium">Totales por mes</p>
          <table class="table-auto">
            <thead>
              <tr>
-               <th>Mes</th>
-               <th>Ganancia</th>
-               <th>Gastos</th>
-               <th>Balance</th>
+               <th  class="pl-5">Mes</th>
+               <th class="pl-5" >Ganancia</th>
+               <th class="pl-5">Gastos</th>
+               <th class="pl-5">Balance</th>
              </tr>
            </thead>
-           <tbody>
-             <tr>
-               <td>--/--/--</td>
-               <td>$000 ganancia</td>
-               <td>$000 gastos</td>
-               <td>$000 balance</td>
+           <tbody class="totales-por-mes">
+             <tr >
              </tr>
            </tbody>
          </table>
