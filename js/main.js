@@ -21,10 +21,13 @@ const operationsData = (operations) => {
     showElement(".with-operations");
 
     for (const { id, description, amount, guy, category, date } of operations) {
+    // let categorySelected = getOperationsAndCategories("categories").find(cate=> cate.id === category.category)
+    // console.log(category)
+
       $("#table-operations").innerHTML += `
     <tr>
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
-    <td class="text-emerald-500 pl-[30px] pt-4 value ="${category}" ">${category}</td>
+    <td class="text-emerald-500 pl-[30px] pt-4  value ="${category}" ">${category}</td>
     <td class="max-sm:hidden"></td>
      <td class="pl-[30px] pt-4 max-sm:pl-[10px]">${date.slice(
        8,
@@ -87,12 +90,14 @@ const validateFieldDescription = () => {
 };
 
 const saveOperationsInformation = (operationId) => {
+// const categoryId = $("#category").options[$("#category").selectedIndex].getAttribute("data-id")
+
   return {
     id: operationId ? operationId : randomId(),
     description: $("#description").value,
     amount: $("#amount").valueAsNumber,
     guy: $("#guy").value,
-    category: $("#category").value,
+    category: $("#category").value, 
     date: $("#date").value,
   };
 };
@@ -155,24 +160,23 @@ const categoriesData = (defaultCategories) => {
   $("#select-category").innerHTML += "";
   for (const { id, category } of defaultCategories) {
     $("#select-category").innerHTML += `
-    <option  value="${category}">${category} </option>
+    <option  value="${category}"   id=" ${id}" >${category} </option>
     `;
     //hoy sabado//
 
     //
     $("#category").innerHTML += `
-    <option  value="${category}" id=" ${id}">${category} </option>
+    <option  value="${category}" data-id=" ${id}">${category} </option>
     `;
   }
 };
 
 const sectionCategories = (defaultCategories) => {
   $("#table-new-categories").innerHTML = "";
-
   for (const { id, category } of defaultCategories) {
     $("#table-new-categories").innerHTML += `
    <tr class= "flex justify-between ...">
-   <td><option  class="text-emerald-500"  value="${category}" " )>${category} </option> </td>
+   <td><option  class="text-emerald-500"  value="${category}" " >${category} </option> </td>
    <td><button class= "edit-category " onclick="editCategory('${id}')"><i class="fa-solid fa-pen-to-square"></i> </button>
    <button class="delete-category" onclick="deleteCategory('${id}')" ><i class="fa-solid fa-trash "></i> </button></td>
     </tr>
@@ -182,9 +186,8 @@ const sectionCategories = (defaultCategories) => {
 
 const deleteCategory = (id) => {
   myCategories = getOperationsAndCategories("categories").filter(
-    (categorie) => categorie.id !== id
+    (categorie) => categorie.id !== id        
   );
-  console.log(myCategories);
   setOperationsAndCategories("categories", myCategories);
   categoriesData(myCategories);
   sectionCategories(myCategories);
@@ -218,6 +221,7 @@ const endEdit = () => {
 };
 
 const editOperation = (id) => {
+
   showElement(".show-operation");
   hideElement(".show-categories");
   hideElement(".show-balance");
@@ -268,36 +272,61 @@ const editCategory = (id) => {
 //REPORTES//
 
 const cantidadCategories = () => {
+  $(".totales-por-categorias").innerHTML =""    
   $(".categoria-mayor").innerHTML = "";
   let categorias = setOfCategories;
-  let nombreCategoria = "";
+
   let nuevoObj = {};
   let categoria = "";
-
-  for (let i = 0; i < categorias.length; i++) {
+  let objGasto = {};
+  let objBalance = {};
+   let montoGanancia = 0;
+  let montoGasto = 0;
+   let mayorBalance = 0; 
+    let nombreCategoria = "";
+  
+  for (let i = 0; i < categorias.length; i++) { 
+    
     const operacionesFiltradas = setOfOperations.filter(
       (operacion) => operacion.category === categorias[i].category
-    );
-    //console.log(operacionesFiltradas) //Me filtra por categorias (separadas)
-
-    let monto = 0;
-    let montoGasto = 0;
-
-    for (const category of operacionesFiltradas) {
+    );            
+  for (const category of operacionesFiltradas) {     
       guy = category.guy;
-      guy === "Ganancia" ? (monto += category.amount) : 0;
+      date = category.date.slice(0, 7);     
+      if (guy === "Ganancia") {
+         montoGanancia += category.amount;
+        nombreCategoria = category.category;
+        nuevoObj[nombreCategoria] = montoGanancia;
+      } else if (guy === "Gasto") {
+        montoGasto += category.amount;
+        nombreCategoria = category.category;
+        objGasto[nombreCategoria] = montoGasto;      
+      }     
+      mayorBalance = montoGanancia - montoGasto;
       nombreCategoria = category.category;
-      console.log(nombreCategoria)
-      // if (nombreCategoria === categoria.category) {
-     
-      //   nuevoObj[nombreCategoria] = monto;
-      // }
-      nuevoObj[nombreCategoria] = monto;
+      objBalance[nombreCategoria] = mayorBalance;   
+        
     }
+  
+   $(".totales-por-categorias").innerHTML += `
+     <tr>
+      <td class="pl-4 ">${nombreCategoria} </td>
+      <td class="pl-4">${montoGasto = 0 ? "0" : montoGasto} </td>
+      <td class="pl-4">  ${montoGanancia = 0 ? "0" : montoGanancia} </td>
+      <td > ${mayorBalance} </td>
+    </tr>
+     `;  
   }
-  console.log(nuevoObj);
+
+
+  let montoMayorBalance = 0;
+  let categoriaMayorBalance = "";
+
   let montoMayorGanancia = 0;
   let categoriaMayorGanancia = "";
+
+  let montoMayorGasto = 0;
+  let categoriaMayorGasto = "";
 
   for (const key in nuevoObj) {
     if (nuevoObj[key] > montoMayorGanancia) {
@@ -305,16 +334,40 @@ const cantidadCategories = () => {
       categoriaMayorGanancia = key;
     }
   }
+  for (const key in objGasto) {
+    if (objGasto[key] > montoMayorGasto) {
+      montoMayorGasto = objGasto[key];
+      categoriaMayorGasto = key;
+    }
+  }
+  for (const key in objBalance) {
+    if (objBalance[key] > montoMayorBalance) {
+      montoMayorBalance = objBalance[key];
+      categoriaMayorBalance = key;
+    }
+  }
   $(".categoria-mayor").innerHTML = `
-<td>Categoria con mayor ganancia</td>
-<td > ${categoriaMayorGanancia}</td>
-<td> $${montoMayorGanancia}</td>
-`;
+   <td class="font-medium">Categoria con mayor ganancia</td>
+    <td class="pl-4 text-emerald-500 "> ${categoriaMayorGanancia}</td>
+   <td class="text-teal-400"> $${montoMayorGanancia}</td>
+    `;
 
-  return categoriaMayorGanancia + " " + montoMayorGanancia;
+  $(".categoria-mayor-gasto").innerHTML = `
+    <td class="font-medium">Categoria con mayor gasto</td>
+     <td class="pl-4 text-emerald-500">${categoriaMayorGasto}</td>
+    <td class="text-rose-500"> $${montoMayorGasto}</td>
+     `;
+
+  $(".categoria-mayor-balance").innerHTML = `
+      <td class="font-medium" >Categoría con mayor balance</td>
+     <td class="pl-4 text-emerald-500 ">${categoriaMayorBalance}</td>
+     <td class="font-medium">$${montoMayorBalance}</td>  
+     `;
+//  return categoriaMayorGanancia + " " + montoMayorGanancia;
+
 };
 
-console.log(cantidadCategories());
+
 
 //
 
@@ -337,9 +390,6 @@ const allFilters = () => {
 
   const inputDate = $("#date-filter").value;
   const filterDate = filterCategory.filter((operacion) => {
-    // if (inputDate === "" ? "" : new Date()) {
-    //    return operacion;
-    // }
     return new Date(operacion.date) > new Date(inputDate);
   });
 
@@ -385,7 +435,7 @@ const openSaved = () => {
   categoriesData(setOfCategories);
   sectionCategories(setOfCategories);
   inputCurrentDate();
-
+ 
   $("#categories").addEventListener("click", () => {
     showElement(".show-categories");
     showElement(".title-categories");
@@ -397,6 +447,7 @@ const openSaved = () => {
     hideElement(".show-balance");
     hideElement(".show-reports");
     hideElement(".show-operation");
+   
   });
 
   $("#balance").addEventListener("click", () => {
@@ -407,10 +458,13 @@ const openSaved = () => {
   });
 
   $("#reports").addEventListener("click", () => {
+    cantidadCategories();
     showElement(".show-reports");
     hideElement(".show-balance");
     hideElement(".show-categories");
     hideElement(".show-operation");
+    //cantidadCategories();
+
   });
 
   $("#new-operation").addEventListener("click", () => {
