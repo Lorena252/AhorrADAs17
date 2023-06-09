@@ -24,7 +24,7 @@ const operationsData = (operations) => {
       $("#table-operations").innerHTML += `
     <tr>
     <td class="pl-[20px] pt-4 font-medium">${description}</td>
-    <td class="text-emerald-500 pl-[30px] pt-4 ">${category}</td>
+    <td class="text-emerald-500 pl-[30px] pt-4  value ="${category} ">${category}</td>
     <td class="max-sm:hidden"></td>
      <td class="pl-[30px] pt-4 max-sm:pl-[10px]">${date.slice(
        8,
@@ -108,7 +108,7 @@ const deleteOperation = (id) => {
   myOperations = getOperationsAndCategories("operations").filter(
     (operation) => operation.id !== id
   );
-  console.log(myOperations);
+
   setOperationsAndCategories("operations", myOperations);
   operationsData(myOperations);
 };
@@ -155,10 +155,10 @@ const categoriesData = (defaultCategories) => {
   $("#select-category").innerHTML += "";
   for (const { id, category } of defaultCategories) {
     $("#select-category").innerHTML += `
-    <option  value="${category}">${category} </option>
+    <option  value="${category}"   id=" ${id}" >${category} </option>
     `;
     $("#category").innerHTML += `
-    <option  value="${category}">${category} </option>
+    <option  value="${category}" data-id="${id}" >${category} </option>
     `;
   }
 };
@@ -166,9 +166,9 @@ const categoriesData = (defaultCategories) => {
 const sectionCategories = (defaultCategories) => {
   $("#table-new-categories").innerHTML = "";
   for (const { id, category } of defaultCategories) {
-    $("#table-new-categories").innerHTML += `  
-   <tr class= "flex justify-between ..."> 
-   <td><option  class="text-emerald-500"  value="${category}">${category} </option> </td>
+    $("#table-new-categories").innerHTML += `
+   <tr class= "flex justify-between ...">
+   <td><option  class="text-emerald-500"  value="${category}" " >${category} </option> </td>
    <td><button class= "edit-category " onclick="editCategory('${id}')"><i class="fa-solid fa-pen-to-square"></i> </button>
    <button class="delete-category" onclick="deleteCategory('${id}')" ><i class="fa-solid fa-trash "></i> </button></td>
     </tr>
@@ -222,7 +222,7 @@ const editOperation = (id) => {
   const editMyOperation = getOperationsAndCategories("operations").find(
     (operation) => operation.id === id
   );
-  console.log(editMyOperation);
+
   $("#edit-operation").setAttribute("btn-edit", id);
   $("#description").value = editMyOperation.description;
   $("#amount").valueAsNumber = editMyOperation.amount;
@@ -253,10 +253,173 @@ const editCategory = (id) => {
   const editSpecifiCategory = getOperationsAndCategories("categories").find(
     (categorie) => categorie.id === id
   );
-  console.log(editSpecifiCategory);
+
   $("#btn-edit-category").setAttribute("edit-category", id);
   $("#new-category").value = editSpecifiCategory.category;
 };
+const cantidasPorMes = () => {
+  let objProfitMonth = {};
+  let objMonthExpenses = {};
+  let objMonthBalance = {};
+  let monthBalance = "";
+  let data = setOfOperations;
+  let nameMonth = "";
+  $(".totales-por-mes").innerHTML = "";
+  for (let i = 0; i < data.length; i++) {
+    let mesMayorGasto = 0;
+    let mesMayorGanancia = 0;
+    const mesesFiltrados = setOfOperations.filter(
+      (operation) => operation.date === data[i].date
+    );
+    for (const date of mesesFiltrados) {
+      guy = date.guy;
+      operation = date.amount;
+      fecha = date.date.slice(0, 7);
+      if (fecha === fecha && guy === "Ganancia") {
+        mesMayorGanancia += operation;
+        nameMonth = fecha;
+        objProfitMonth[nameMonth] = mesMayorGanancia;
+      } else if (fecha === fecha && guy === "Gasto") {
+        mesMayorGasto += operation;
+        nameMonth = fecha;
+        objMonthExpenses[nameMonth] = mesMayorGasto;
+      }
+      monthBalance = mesMayorGanancia - mesMayorGasto;
+      nameMonth = fecha;
+      objMonthBalance[nameMonth] = date.amount;
+    }
+
+    $(".totales-por-mes").innerHTML += `
+<td class="pl-4 font-medium">${nameMonth}   </td> 
+ <td class="pl-6 text-teal-400">$${mesMayorGanancia} </td>
+<td class="pl-6 text-rose-500"> $${mesMayorGasto} </td>
+<td>$${monthBalance}</td> 
+`;
+  }
+
+  let monthPlusProfit = "";
+  let mesMontoGanancia = 0;
+  for (const key in objProfitMonth) {
+    if (objProfitMonth[key] > mesMontoGanancia) {
+      mesMontoGanancia = objProfitMonth[key];
+      monthPlusProfit = key;
+    }
+  }
+
+  $(".mes-mayor-ganancia").innerHTML = `
+<td class="font-medium">Mes con mayor ganancia</td>
+<td>${monthPlusProfit}</td>
+<td class= " pl-3 text-teal-400" > $${mesMontoGanancia}</td> 
+`;
+  let mesMayorGasto = "";
+  let mesMontoGasto = 0;
+  for (const key in objMonthExpenses) {
+    if (objMonthExpenses[key] > mesMontoGasto) {
+      mesMontoGasto = objMonthExpenses[key];
+      mesMayorGasto = key;
+    }
+  }
+
+  $(".mes-mayor-gasto").innerHTML = `
+<td class="font-medium">Mes con mayor gasto</td>
+<td>${mesMayorGasto}</td>
+<td class="pl-3 text-rose-500">$${mesMontoGasto}</td> 
+`;
+};
+cantidasPorMes();
+
+const cantidadCategories = () => {
+  $(".totales-por-categorias").innerHTML = "";
+  $(".categoria-mayor").innerHTML = "";
+  let categorias = setOfCategories;
+  let newObj = {};
+  let objBills = {};
+  let objBalance = {};
+  let profitAmount = 0;
+  let expenseAmount = 0;
+  let greaterBalance = 0;
+  let categoryName = "";
+
+  for (let i = 0; i < categorias.length; i++) {
+    const operacionesFiltradas = setOfOperations.filter(
+      (operacion) => operacion.category === categorias[i].category
+    );
+    for (const category of operacionesFiltradas) {
+      guy = category.guy;
+      if (guy === "Ganancia") {
+        profitAmount += category.amount;
+        categoryName = category.category;
+        newObj[categoryName] = profitAmount;
+      } else if (guy === "Gasto") {
+        expenseAmount += category.amount;
+        categoryName = category.category;
+        objBills[categoryName] = expenseAmount;
+      }
+      greaterBalance = profitAmount - expenseAmount;
+      categoryName = category.category;
+      objBalance[categoryName] = greaterBalance;
+
+      $(".totales-por-categorias").innerHTML += `
+     <tr>
+      <td class="pl-4 font-medium">${categoryName} </td>
+      <td class="pl-4 text-rose-500 ">$${(expenseAmount = 0
+        ? "0"
+        : expenseAmount)} </td>
+      <td class="pl-4 text-teal-400" > $ ${(profitAmount = 0
+        ? "0"
+        : profitAmount)} </td>
+      <td > $${greaterBalance} </td>
+    </tr>
+     `;
+    }
+  }
+
+  let higherProfitAmount = 0;
+  let higherEarningCategory = "";
+
+  let higherExpenseAmount = 0;
+  let higherExpenseCategory = "";
+
+  let higherBalanceAmount = 0;
+  let categoryHigherBalance = "";
+
+  for (const key in newObj) {
+    if (newObj[key] > higherProfitAmount) {
+      higherProfitAmount = newObj[key];
+      higherEarningCategory = key;
+    }
+    $(".categoria-mayor").innerHTML = `
+   <td class="font-medium">Categoria con mayor ganancia</td>
+    <td class="pl-4 text-emerald-500 "> ${higherEarningCategory}</td>
+   <td class="text-teal-400"> $${higherProfitAmount}</td>
+    `;
+  }
+
+  for (const key in objBills) {
+    if (objBills[key] > higherExpenseAmount) {
+      higherExpenseAmount = objBills[key];
+      higherExpenseCategory = key;
+    }
+    $(".categoria-mayor-gasto").innerHTML = `
+    <td class="font-medium">Categoria con mayor gasto</td>
+     <td class="pl-4 text-emerald-500">${higherExpenseCategory}</td>
+    <td class="text-rose-500"> $${higherExpenseAmount}</td>
+     `;
+  }
+  for (const key in objBalance) {
+    if (objBalance[key] > higherBalanceAmount) {
+      higherBalanceAmount = objBalance[key];
+      categoryHigherBalance = key;
+    }
+
+    $(".categoria-mayor-balance").innerHTML = `
+      <td class="font-medium" >Categoría con mayor balance</td>
+     <td class="pl-4 text-emerald-500 ">${categoryName}</td>
+     <td class="font-medium">$${greaterBalance}</td>  
+     `;
+  }
+};
+cantidadCategories();
 
 const allFilters = () => {
   const selectType = $("#select-type").value;
@@ -277,9 +440,6 @@ const allFilters = () => {
 
   const inputDate = $("#date-filter").value;
   const filterDate = filterCategory.filter((operacion) => {
-    if (inputDate === "" ? "" : new Date()) {
-      return operacion;
-    }
     return new Date(operacion.date) > new Date(inputDate);
   });
 
